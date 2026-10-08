@@ -1,0 +1,21 @@
+{
+    "url": "/v1/runs",
+    "method": "GET",
+    "qs": {
+        "limit": 50
+    },
+    "response": {
+        "limit": "{{parameters.limit}}",
+        "iterate": {
+            "container": "{{body.runs}}",
+            "condition": "{{item.status == 'completed' || item.status == 'failed' || item.status == 'blocked' || item.status == 'stopped'}}"
+        },
+        "output": "{{item}}",
+        "trigger": {
+            "id": "{{item.runId}}",
+            "date": "{{ifempty(item.completedAt, item.createdAt)}}",
+            "type": "date",
+            "order": "unordered"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+[
+    {
+        "name": "endpointId",
+        "type": "text",
+        "label": "Endpoint ID"
+    },
+    {
+        "name": "provider",
+        "type": "text",
+        "label": "Provider"
+    },
+    {
+        "name": "capability",
+        "type": "text",
+        "label": "Job ID"
+    },
+    {
+        "name": "estimatedPrice",
+        "type": "number",
+        "label": "Price (USD)"
+    },
+    {
+        "name": "priceBasis",
+        "type": "text",
+        "label": "Price basis"
+    },
+    {
+        "name": "costPerSuccessUsd",
+        "type": "number",
+        "label": "Cost per success (USD)"
+    }
+]

@@ -1,0 +1,10 @@
+{
+    "runId": "run_01J9ZK2Q7W8X",
+    "endpointId": "job:people.email.verify",
+    "providerId": "icypeas",
+    "status": "completed",
+    "createdAt": "2026-10-08T10:00:00.000Z",
+    "completedAt": "2026-10-08T10:00:02.000Z",
+    "actualCost": 0.00145,
+    "resultBytes": 212
+}

@@ -1,0 +1,19 @@
+{
+    "url": "https://api.looot.ai/{{parameters.url}}",
+    "method": "{{parameters.method}}",
+    "qs": {
+        "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+    },
+    "headers": {
+        "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+    },
+    "body": "{{parameters.body}}",
+    "type": "text",
+    "response": {
+        "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+        }
+    }
+}

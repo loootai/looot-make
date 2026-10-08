@@ -1,0 +1,5 @@
+node_modules/
+.cache/
+.secrets/
+.env
+.DS_Store

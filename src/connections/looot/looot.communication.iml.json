@@ -1,0 +1,22 @@
+{
+    "url": "https://api.looot.ai/v1/balance",
+    "method": "GET",
+    "headers": {
+        "Authorization": "Bearer {{parameters.apiKey}}"
+    },
+    "response": {
+        "valid": "{{statusCode === 200 && !body.error}}",
+        "error": {
+            "message": "[{{statusCode}}] {{body.error.code}}: {{body.error.message}}"
+        },
+        "metadata": {
+            "type": "text",
+            "value": "{{body.workspaceId}}"
+        }
+    },
+    "log": {
+        "sanitize": [
+            "request.headers.authorization"
+        ]
+    }
+}

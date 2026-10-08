@@ -1,0 +1,64 @@
+[
+    {
+        "name": "query",
+        "type": "text",
+        "label": "Query",
+        "required": true,
+        "help": "What you want to do, in plain words. For example `find the work email of a person at a company`."
+    },
+    {
+        "name": "prefer",
+        "type": "select",
+        "label": "Order by",
+        "default": "balanced",
+        "options": [
+            {
+                "label": "Balanced",
+                "value": "balanced"
+            },
+            {
+                "label": "Cheapest",
+                "value": "cheapest"
+            },
+            {
+                "label": "Most reliable",
+                "value": "reliable"
+            },
+            {
+                "label": "Fastest",
+                "value": "fastest"
+            }
+        ]
+    },
+    {
+        "name": "maxPriceMicros",
+        "type": "uinteger",
+        "label": "Max price (millionths of a dollar)",
+        "advanced": true,
+        "help": "Leaves out endpoints that cost more than this. `2000` is $0.002."
+    },
+    {
+        "name": "category",
+        "type": "text",
+        "label": "Category",
+        "advanced": true,
+        "help": "For example `enrichment`."
+    },
+    {
+        "name": "provider",
+        "type": "text",
+        "label": "Provider",
+        "advanced": true
+    },
+    {
+        "name": "limit",
+        "type": "uinteger",
+        "label": "Limit",
+        "default": 10,
+        "help": "The maximum number of results to return, from 1 to 200.",
+        "validate": {
+            "min": 1,
+            "max": 200
+        }
+    }
+]

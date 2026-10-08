@@ -1,0 +1,47 @@
+[
+    {
+        "name": "domain",
+        "type": "text",
+        "label": "Company domain",
+        "help": "For example `example.com`. A full URL also works; looot keeps the host."
+    },
+    {
+        "name": "companyName",
+        "type": "text",
+        "label": "Company name",
+        "help": "Use this when you have no domain."
+    },
+    {
+        "name": "fallback",
+        "type": "boolean",
+        "label": "Try other providers",
+        "default": true,
+        "required": true,
+        "help": "When the first provider finds nothing, looot tries the next provider of the same job. Only the attempts that ran are charged. Works with job IDs only."
+    },
+    {
+        "name": "maxCostUsd",
+        "type": "number",
+        "label": "Max cost (USD)",
+        "advanced": true,
+        "help": "The most this module may spend across all providers it tries, for example `0.1`. Leave empty for the default cap. Used only when Try other providers is on."
+    },
+    {
+        "name": "wait",
+        "type": "uinteger",
+        "label": "Wait (seconds)",
+        "default": 20,
+        "advanced": true,
+        "validate": {
+            "max": 30
+        },
+        "help": "How long to wait for the result, from 0 to 30. A run that takes longer comes back with the status `queued` or `running`; read it later with Get a run."
+    },
+    {
+        "name": "idempotencyKey",
+        "type": "text",
+        "label": "Idempotency key",
+        "advanced": true,
+        "help": "The same key with the same input never pays twice. Leave empty and the module builds one from the input and the date."
+    }
+]

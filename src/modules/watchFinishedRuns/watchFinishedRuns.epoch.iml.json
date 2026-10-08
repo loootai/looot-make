@@ -1,0 +1,15 @@
+{
+    "url": "/v1/runs",
+    "method": "GET",
+    "qs": {
+        "limit": 50
+    },
+    "response": {
+        "limit": 50,
+        "iterate": "{{body.runs}}",
+        "output": {
+            "label": "{{item.endpointId}} ({{item.status}})",
+            "date": "{{ifempty(item.completedAt, item.createdAt)}}"
+        }
+    }
+}

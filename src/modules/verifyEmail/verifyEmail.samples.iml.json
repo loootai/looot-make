@@ -1,0 +1,10 @@
+{
+    "email": "jane.doe@example.com",
+    "emailStatus": "valid",
+    "deliverable": true,
+    "runId": "run_01J9ZK2Q7W8X",
+    "status": "completed",
+    "actualCost": 0.00145,
+    "replayed": false,
+    "endpointId": "job:people.email.verify"
+}

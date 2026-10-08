@@ -1,0 +1,177 @@
+{
+    "fileVersion": 1,
+    "generalCodeFiles": {
+        "base": "general/base.iml.json",
+        "common": "general/common.json",
+        "readme": "README.md",
+        "groups": "modules/groups.json"
+    },
+    "components": {
+        "connection": {
+            "looot": {
+                "label": "looot",
+                "connectionType": "basic",
+                "codeFiles": {
+                    "communication": "connections/looot/looot.communication.iml.json",
+                    "params": "connections/looot/looot.params.iml.json",
+                    "common": "connections/looot/looot.common.json"
+                }
+            }
+        },
+        "webhook": {},
+        "module": {
+            "findWorkEmail": {
+                "label": "Find a work email",
+                "description": "Finds the work email of a person from their name and company domain.",
+                "moduleType": "action",
+                "actionCrud": "read",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/findWorkEmail/findWorkEmail.communication.iml.json",
+                    "staticParams": "modules/findWorkEmail/findWorkEmail.static-params.iml.json",
+                    "mappableParams": "modules/findWorkEmail/findWorkEmail.mappable-params.iml.json",
+                    "interface": "modules/findWorkEmail/findWorkEmail.interface.iml.json",
+                    "samples": "modules/findWorkEmail/findWorkEmail.samples.iml.json"
+                }
+            },
+            "verifyEmail": {
+                "label": "Verify an email",
+                "description": "Checks whether an email address is deliverable before you send to it.",
+                "moduleType": "action",
+                "actionCrud": "read",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/verifyEmail/verifyEmail.communication.iml.json",
+                    "staticParams": "modules/verifyEmail/verifyEmail.static-params.iml.json",
+                    "mappableParams": "modules/verifyEmail/verifyEmail.mappable-params.iml.json",
+                    "interface": "modules/verifyEmail/verifyEmail.interface.iml.json",
+                    "samples": "modules/verifyEmail/verifyEmail.samples.iml.json"
+                }
+            },
+            "enrichCompany": {
+                "label": "Enrich a company",
+                "description": "Returns the name, industry and size of a company from its domain or name.",
+                "moduleType": "action",
+                "actionCrud": "read",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/enrichCompany/enrichCompany.communication.iml.json",
+                    "staticParams": "modules/enrichCompany/enrichCompany.static-params.iml.json",
+                    "mappableParams": "modules/enrichCompany/enrichCompany.mappable-params.iml.json",
+                    "interface": "modules/enrichCompany/enrichCompany.interface.iml.json",
+                    "samples": "modules/enrichCompany/enrichCompany.samples.iml.json"
+                }
+            },
+            "runOperation": {
+                "label": "Run an operation",
+                "description": "Runs any endpoint or job from the catalog and spends prepaid credit.",
+                "moduleType": "action",
+                "actionCrud": "create",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/runOperation/runOperation.communication.iml.json",
+                    "staticParams": "modules/runOperation/runOperation.static-params.iml.json",
+                    "mappableParams": "modules/runOperation/runOperation.mappable-params.iml.json",
+                    "interface": "modules/runOperation/runOperation.interface.iml.json",
+                    "samples": "modules/runOperation/runOperation.samples.iml.json"
+                }
+            },
+            "searchCatalog": {
+                "label": "Search operations",
+                "description": "Searches the catalog for endpoints that do a task and returns the price of each. Free.",
+                "moduleType": "search",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/searchCatalog/searchCatalog.communication.iml.json",
+                    "staticParams": "modules/searchCatalog/searchCatalog.static-params.iml.json",
+                    "mappableParams": "modules/searchCatalog/searchCatalog.mappable-params.iml.json",
+                    "interface": "modules/searchCatalog/searchCatalog.interface.iml.json",
+                    "samples": "modules/searchCatalog/searchCatalog.samples.iml.json"
+                }
+            },
+            "getOperation": {
+                "label": "Get an operation",
+                "description": "Returns the exact inputs, output and price of one endpoint or job. Free.",
+                "moduleType": "action",
+                "actionCrud": "read",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/getOperation/getOperation.communication.iml.json",
+                    "staticParams": "modules/getOperation/getOperation.static-params.iml.json",
+                    "mappableParams": "modules/getOperation/getOperation.mappable-params.iml.json",
+                    "interface": "modules/getOperation/getOperation.interface.iml.json",
+                    "samples": "modules/getOperation/getOperation.samples.iml.json"
+                }
+            },
+            "getRun": {
+                "label": "Get a run",
+                "description": "Returns the status, result and cost of one run. Free.",
+                "moduleType": "action",
+                "actionCrud": "read",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/getRun/getRun.communication.iml.json",
+                    "staticParams": "modules/getRun/getRun.static-params.iml.json",
+                    "mappableParams": "modules/getRun/getRun.mappable-params.iml.json",
+                    "interface": "modules/getRun/getRun.interface.iml.json",
+                    "samples": "modules/getRun/getRun.samples.iml.json"
+                }
+            },
+            "getBalance": {
+                "label": "Get the balance",
+                "description": "Returns the available credit of the workspace and the top-up link. Free.",
+                "moduleType": "action",
+                "actionCrud": "read",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/getBalance/getBalance.communication.iml.json",
+                    "staticParams": "modules/getBalance/getBalance.static-params.iml.json",
+                    "mappableParams": "modules/getBalance/getBalance.mappable-params.iml.json",
+                    "interface": "modules/getBalance/getBalance.interface.iml.json",
+                    "samples": "modules/getBalance/getBalance.samples.iml.json"
+                }
+            },
+            "watchFinishedRuns": {
+                "label": "Watch finished runs",
+                "description": "Triggers when a run in your workspace reaches a final status.",
+                "moduleType": "trigger",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/watchFinishedRuns/watchFinishedRuns.communication.iml.json",
+                    "staticParams": "modules/watchFinishedRuns/watchFinishedRuns.static-params.iml.json",
+                    "mappableParams": "modules/watchFinishedRuns/watchFinishedRuns.mappable-params.iml.json",
+                    "interface": "modules/watchFinishedRuns/watchFinishedRuns.interface.iml.json",
+                    "samples": "modules/watchFinishedRuns/watchFinishedRuns.samples.iml.json",
+                    "epoch": "modules/watchFinishedRuns/watchFinishedRuns.epoch.iml.json"
+                }
+            },
+            "makeApiCall": {
+                "label": "Make an API call",
+                "description": "Performs an arbitrary authorized API call.",
+                "moduleType": "universal",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "modules/makeApiCall/makeApiCall.communication.iml.json",
+                    "staticParams": "modules/makeApiCall/makeApiCall.static-params.iml.json",
+                    "mappableParams": "modules/makeApiCall/makeApiCall.mappable-params.iml.json",
+                    "interface": "modules/makeApiCall/makeApiCall.interface.iml.json",
+                    "samples": "modules/makeApiCall/makeApiCall.samples.iml.json"
+                }
+            }
+        },
+        "rpc": {},
+        "function": {},
+        "endpoint": {}
+    },
+    "origins": []
+}

@@ -1,0 +1,62 @@
+[
+    {
+        "name": "email",
+        "type": "email",
+        "label": "Email"
+    },
+    {
+        "name": "check",
+        "type": "text",
+        "label": "Email check"
+    },
+    {
+        "name": "runId",
+        "type": "text",
+        "label": "Run ID"
+    },
+    {
+        "name": "status",
+        "type": "text",
+        "label": "Status"
+    },
+    {
+        "name": "endpointId",
+        "type": "text",
+        "label": "Endpoint ID"
+    },
+    {
+        "name": "servedProviderId",
+        "type": "text",
+        "label": "Provider that answered"
+    },
+    {
+        "name": "outcome",
+        "type": "text",
+        "label": "Outcome"
+    },
+    {
+        "name": "actualCost",
+        "type": "number",
+        "label": "Cost (USD)"
+    },
+    {
+        "name": "replayed",
+        "type": "boolean",
+        "label": "Replayed"
+    },
+    {
+        "name": "result",
+        "type": "any",
+        "label": "Result (provider's raw answer)"
+    },
+    {
+        "name": "normalized",
+        "type": "any",
+        "label": "Normalized output"
+    },
+    {
+        "name": "error",
+        "type": "any",
+        "label": "Error"
+    }
+]

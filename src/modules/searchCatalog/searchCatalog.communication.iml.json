@@ -1,0 +1,17 @@
+{
+    "url": "/v1/catalog/search",
+    "method": "GET",
+    "qs": {
+        "q": "{{parameters.query}}",
+        "limit": "{{ifempty(parameters.limit, 10)}}",
+        "prefer": "{{parameters.prefer}}",
+        "maxPriceMicros": "{{parameters.maxPriceMicros}}",
+        "category": "{{parameters.category}}",
+        "provider": "{{parameters.provider}}"
+    },
+    "response": {
+        "iterate": "{{body.items}}",
+        "limit": "{{ifempty(parameters.limit, 10)}}",
+        "output": "{{item}}"
+    }
+}

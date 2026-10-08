@@ -1,0 +1,32 @@
+[
+    {
+        "label": "Leads",
+        "modules": [
+            "findWorkEmail",
+            "verifyEmail",
+            "enrichCompany"
+        ]
+    },
+    {
+        "label": "Catalog",
+        "modules": [
+            "searchCatalog",
+            "getOperation"
+        ]
+    },
+    {
+        "label": "Runs",
+        "modules": [
+            "runOperation",
+            "getRun",
+            "watchFinishedRuns"
+        ]
+    },
+    {
+        "label": "Other",
+        "modules": [
+            "getBalance",
+            "makeApiCall"
+        ]
+    }
+]

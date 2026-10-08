@@ -1,0 +1,22 @@
+[
+    {
+        "name": "currency",
+        "type": "text",
+        "label": "Currency"
+    },
+    {
+        "name": "available",
+        "type": "number",
+        "label": "Available"
+    },
+    {
+        "name": "reserved",
+        "type": "number",
+        "label": "Reserved"
+    },
+    {
+        "name": "topUpUrl",
+        "type": "url",
+        "label": "Top-up URL"
+    }
+]

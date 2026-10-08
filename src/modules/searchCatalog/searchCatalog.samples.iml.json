@@ -1,0 +1,7 @@
+{
+    "endpointId": "icypeas-email-verify",
+    "provider": "icypeas",
+    "capability": "people.email.verify",
+    "estimatedPrice": 0.0019,
+    "priceBasis": "perCall"
+}

@@ -1,0 +1,10 @@
+[
+    {
+        "name": "limit",
+        "type": "uinteger",
+        "label": "Limit",
+        "default": 2,
+        "required": true,
+        "help": "The maximum number of runs Make works with during one execution cycle."
+    }
+]

@@ -1,0 +1,7 @@
+{
+    "url": "/v1/balance",
+    "method": "GET",
+    "response": {
+        "output": "{{body}}"
+    }
+}

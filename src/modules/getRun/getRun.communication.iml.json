@@ -1,0 +1,21 @@
+{
+    "url": "/v1/runs/{{parameters.runId}}",
+    "method": "GET",
+    "response": {
+        "output": {
+            "fields": "{{body.normalized.fields}}",
+            "createdAt": "{{body.createdAt}}",
+            "completedAt": "{{body.completedAt}}",
+            "runId": "{{body.runId}}",
+            "status": "{{body.status}}",
+            "endpointId": "{{body.endpointId}}",
+            "servedProviderId": "{{body.servedProviderId}}",
+            "outcome": "{{body.outcome}}",
+            "actualCost": "{{body.actualCost}}",
+            "replayed": "{{body.replayed}}",
+            "result": "{{body.result}}",
+            "normalized": "{{body.normalized}}",
+            "error": "{{body.error}}"
+        }
+    }
+}

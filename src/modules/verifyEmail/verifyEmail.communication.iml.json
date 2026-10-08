@@ -1,0 +1,34 @@
+{
+    "url": "/v1/runs",
+    "method": "POST",
+    "body": {
+        "endpointId": "job:people.email.verify",
+        "input": {
+            "email": "{{trim(parameters.email)}}"
+        },
+        "idempotencyKey": "{{ifempty(parameters.idempotencyKey, 'make-' + sha256('job:people.email.verify' + '|' + createJSON(parameters) + '|' + formatDate(now, 'YYYY-MM-DD')))}}",
+        "wait": "{{ifempty(parameters.wait, 20)}}",
+        "fallback": "{{if(parameters.fallback == false, false, if(parameters.maxCostUsd > 0, parseJSON('{\"enabled\":true,\"maxCostUsd\":' + parameters.maxCostUsd + '}'), true))}}"
+    },
+    "response": {
+        "valid": {
+            "condition": "{{body.status != 'failed' && body.status != 'blocked' && body.status != 'stopped'}}",
+            "message": "Run {{body.runId}} ended {{body.status}}: [{{body.error.code}}] {{body.error.message}}"
+        },
+        "output": {
+            "email": "{{body.normalized.fields.email}}",
+            "emailStatus": "{{body.normalized.fields.status}}",
+            "deliverable": "{{body.normalized.fields.deliverable}}",
+            "runId": "{{body.runId}}",
+            "status": "{{body.status}}",
+            "endpointId": "{{body.endpointId}}",
+            "servedProviderId": "{{body.servedProviderId}}",
+            "outcome": "{{body.outcome}}",
+            "actualCost": "{{body.actualCost}}",
+            "replayed": "{{body.replayed}}",
+            "result": "{{body.result}}",
+            "normalized": "{{body.normalized}}",
+            "error": "{{body.error}}"
+        }
+    }
+}

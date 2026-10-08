@@ -1,0 +1,21 @@
+{
+  "name": "looot-make",
+  "version": "0.1.0",
+  "private": true,
+  "description": "looot custom app for Make: find work emails, verify them, enrich companies and run 2,500+ data endpoints in a scenario with one key and one prepaid balance.",
+  "license": "MIT",
+  "homepage": "https://looot.ai",
+  "author": { "name": "looot", "url": "https://looot.ai" },
+  "repository": { "type": "git", "url": "https://github.com/loootai/looot-make.git" },
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "schemas": "node scripts/fetch-schemas.mjs",
+    "test": "node scripts/fetch-schemas.mjs && node --test test/app.test.mjs test/import.test.mjs",
+    "import:dry": "node scripts/import.mjs",
+    "import": "node scripts/import.mjs --apply"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0"
+  }
+}

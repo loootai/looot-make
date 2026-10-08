@@ -1,0 +1,47 @@
+[
+    {
+        "name": "runId",
+        "type": "text",
+        "label": "Run ID"
+    },
+    {
+        "name": "endpointId",
+        "type": "text",
+        "label": "Endpoint ID"
+    },
+    {
+        "name": "providerId",
+        "type": "text",
+        "label": "Provider"
+    },
+    {
+        "name": "status",
+        "type": "text",
+        "label": "Status"
+    },
+    {
+        "name": "createdAt",
+        "type": "date",
+        "label": "Created at"
+    },
+    {
+        "name": "completedAt",
+        "type": "date",
+        "label": "Completed at"
+    },
+    {
+        "name": "actualCost",
+        "type": "number",
+        "label": "Cost (USD)"
+    },
+    {
+        "name": "resultBytes",
+        "type": "uinteger",
+        "label": "Result size (bytes)"
+    },
+    {
+        "name": "error",
+        "type": "any",
+        "label": "Error"
+    }
+]

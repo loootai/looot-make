@@ -1,0 +1,23 @@
+{
+    "baseUrl": "https://api.looot.ai",
+    "headers": {
+        "Authorization": "Bearer {{connection.apiKey}}",
+        "Accept": "application/json"
+    },
+    "response": {
+        "error": {
+            "message": "[{{statusCode}}] {{body.error.code}}: {{body.error.message}}",
+            "401": {
+                "message": "[401] The looot token is missing or not valid. Create one in the looot dashboard under Settings, Agent tokens."
+            },
+            "402": {
+                "message": "[402] {{body.error.message}} Nothing was charged. Top up at {{ifempty(body.topUp.dashboardUrl, 'https://looot.ai')}}"
+            }
+        }
+    },
+    "log": {
+        "sanitize": [
+            "request.headers.authorization"
+        ]
+    }
+}

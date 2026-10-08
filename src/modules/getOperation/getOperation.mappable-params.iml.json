@@ -1,0 +1,9 @@
+[
+    {
+        "name": "endpointId",
+        "type": "text",
+        "label": "Endpoint or job ID",
+        "required": true,
+        "help": "An endpoint ID from Search operations, or a job written as `job:<job id>`."
+    }
+]

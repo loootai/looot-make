@@ -1,0 +1,9 @@
+[
+    {
+        "name": "runId",
+        "type": "text",
+        "label": "Run ID",
+        "required": true,
+        "help": "The Run ID a run module returned."
+    }
+]

@@ -1,0 +1,7 @@
+{
+    "url": "/v1/operations/{{parameters.endpointId}}",
+    "method": "GET",
+    "response": {
+        "output": "{{body}}"
+    }
+}
