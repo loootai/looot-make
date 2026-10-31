@@ -1,0 +1,149 @@
+{
+  "name": "Find local business leads on Google Maps and add them to Google Sheets with looot",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:watchRows",
+      "version": 2,
+      "parameters": {
+        "from": "drive",
+        "mode": "select",
+        "spreadsheetId": "YOUR_SPREADSHEET_ID",
+        "sheetId": "Searches",
+        "includesHeaders": true,
+        "tableFirstRow": "A1:Z1",
+        "limit": 10
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:maps.local.search",
+        "input": "{\"query\": \"{{1.`0`}} in {{1.`1`}}\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "openai-gpt-3:CreateCompletion",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "select": "chat",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Turn this Google Maps search result into JSON of the form {\"leads\": [{\"name\": \"\", \"address\": \"\", \"phone\": \"\", \"website\": \"\", \"rating\": \"\"}]}. Use only data that is in the result and leave a field empty when it is missing.\n\n{{toString(2.result)}}"
+          }
+        ],
+        "max_tokens": "1200",
+        "temperature": "0.2",
+        "n_completions": "1",
+        "response_format": "json_object"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "json:ParseJSON",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "json": "{{3.result}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "builtin:BasicFeeder",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "array": "{{4.leads}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {},
+      "mapper": {
+        "from": "drive",
+        "mode": "select",
+        "spreadsheetId": "YOUR_SPREADSHEET_ID",
+        "sheetId": "Leads",
+        "includesHeaders": true,
+        "insertDataOption": "INSERT_ROWS",
+        "valueInputOption": "USER_ENTERED",
+        "values": {
+          "0": "{{5.name}}",
+          "1": "{{5.address}}",
+          "2": "{{5.phone}}",
+          "3": "{{5.website}}",
+          "4": "{{5.rating}}",
+          "5": "{{1.`0`}} in {{1.`1`}}",
+          "6": "{{2.actualCost}}"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 1500,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

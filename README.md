@@ -107,6 +107,10 @@ confirm these, in this order:
 4. The import script against the real API. It follows the documented routes and the calls the VS Code
    extension makes, and it is tested against a local stand-in for Make's API only.
 
+## Scenario templates
+
+[templates/](templates) holds 13 importable scenario blueprints built on this app: Google Maps leads, work email waterfall, form leads to HubSpot, competitor cards, daily competitor news and hiring alerts in Slack, signup scoring and more. Five of them redo popular n8n gallery templates with one data account instead of two or three. None has run in Make yet; [templates/README.md](templates/README.md) says what to check.
+
 ## Test
 
 ```bash

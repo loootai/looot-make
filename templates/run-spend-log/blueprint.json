@@ -1,0 +1,67 @@
+{
+  "name": "Log every finished looot run and its cost in Google Sheets",
+  "flow": [
+    {
+      "id": 1,
+      "module": "app#looot:watchFinishedRuns",
+      "version": 1,
+      "parameters": {
+        "limit": 50
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {},
+      "mapper": {
+        "from": "drive",
+        "mode": "select",
+        "spreadsheetId": "YOUR_SPREADSHEET_ID",
+        "sheetId": "Runs",
+        "includesHeaders": true,
+        "insertDataOption": "INSERT_ROWS",
+        "valueInputOption": "USER_ENTERED",
+        "values": {
+          "0": "{{1.runId}}",
+          "1": "{{1.endpointId}}",
+          "2": "{{1.providerId}}",
+          "3": "{{1.status}}",
+          "4": "{{1.actualCost}}",
+          "5": "{{1.completedAt}}"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "name": "Research competitors from a Google Sheets list with looot company data, news and pricing pages",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:watchRows",
+      "version": 2,
+      "parameters": {
+        "from": "drive",
+        "mode": "select",
+        "spreadsheetId": "YOUR_SPREADSHEET_ID",
+        "sheetId": "Competitors",
+        "includesHeaders": true,
+        "tableFirstRow": "A1:Z1",
+        "limit": 10
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#looot:enrichCompany",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "domain": "{{1.`0`}}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:news.search",
+        "input": "{\"query\": \"{{ifempty(2.companyName; 1.`0`)}}\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:web.scrape.markdown",
+        "input": "{\"url\": \"https://{{1.`0`}}/pricing\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "openai-gpt-3:CreateCompletion",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "select": "chat",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Write a competitor card under 200 words: overview, size and funding, pricing, products, recent news. Only use the data below and say when something is missing.\n\nCompany: {{toString(2.result)}}\n\nNews: {{substring(toString(3.result); 0; 4000)}}\n\nPricing page: {{substring(toString(4.result); 0; 6000)}}"
+          }
+        ],
+        "max_tokens": "1200",
+        "temperature": "0.2",
+        "n_completions": "1",
+        "response_format": "text"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "google-sheets:updateRow",
+      "version": 2,
+      "parameters": {},
+      "mapper": {
+        "mode": "map",
+        "spreadsheetId": "{{1.`__SPREADSHEET_ID__`}}",
+        "sheetId": "{{1.`__SHEET__`}}",
+        "rowNumber": "{{1.`__ROW_NUMBER__`}}",
+        "tableFirstRow": "A1:Z1",
+        "valueInputOption": "USER_ENTERED",
+        "values": {
+          "1": "{{2.companyName}}",
+          "2": "{{2.industry}}",
+          "3": "{{2.size}}",
+          "4": "{{5.result}}",
+          "5": "{{2.actualCost + 3.actualCost + 4.actualCost}}"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 1500,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

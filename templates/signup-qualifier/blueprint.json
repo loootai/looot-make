@@ -1,0 +1,209 @@
+{
+  "name": "Qualify new signups with looot and alert Slack on hot leads",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": null,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#looot:verifyEmail",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "email": "{{1.email}}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "app#looot:enrichCompany",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "domain": "{{last(split(1.email; \"@\"))}}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "filter": {
+        "name": "Work email",
+        "conditions": [
+          [
+            {
+              "a": "{{1.email}}",
+              "o": "text:notcontain",
+              "b": "@gmail."
+            },
+            {
+              "a": "{{1.email}}",
+              "o": "text:notcontain",
+              "b": "@yahoo."
+            },
+            {
+              "a": "{{1.email}}",
+              "o": "text:notcontain",
+              "b": "@hotmail."
+            },
+            {
+              "a": "{{1.email}}",
+              "o": "text:notcontain",
+              "b": "@outlook."
+            }
+          ]
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "openai-gpt-3:CreateCompletion",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "select": "chat",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Score this signup for a B2B SaaS that sells to sales teams at companies with 20 to 500 employees. Reply with one word: hot, warm or cold.\n\nEmail status: {{2.emailStatus}}\nCompany: {{3.companyName}}, industry {{3.industry}}, size {{3.size}}"
+          }
+        ],
+        "max_tokens": "1200",
+        "temperature": "0.2",
+        "n_completions": "1",
+        "response_format": "text"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "mapper": null,
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "google-sheets:addRow",
+              "version": 2,
+              "parameters": {},
+              "mapper": {
+                "from": "drive",
+                "mode": "select",
+                "spreadsheetId": "YOUR_SPREADSHEET_ID",
+                "sheetId": "Signups",
+                "includesHeaders": true,
+                "insertDataOption": "INSERT_ROWS",
+                "valueInputOption": "USER_ENTERED",
+                "values": {
+                  "0": "{{1.email}}",
+                  "1": "{{2.emailStatus}}",
+                  "2": "{{3.companyName}}",
+                  "3": "{{3.industry}}",
+                  "4": "{{3.size}}",
+                  "5": "{{lower(trim(4.result))}}",
+                  "6": "{{2.actualCost + 3.actualCost}}"
+                }
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1500,
+                  "y": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 7,
+              "module": "slack:CreateMessage",
+              "version": 4,
+              "parameters": {},
+              "mapper": {
+                "channel": "YOUR_CHANNEL_ID",
+                "text": "Hot signup: {{1.name}} <{{1.email}}> at {{3.companyName}} ({{3.size}}, {{3.industry}})"
+              },
+              "filter": {
+                "name": "Hot",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{lower(4.result)}}",
+                      "o": "text:contain",
+                      "b": "hot"
+                    }
+                  ]
+                ]
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1500,
+                  "y": 300
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

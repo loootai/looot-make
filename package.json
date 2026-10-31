@@ -11,7 +11,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "schemas": "node scripts/fetch-schemas.mjs",
-    "test": "node scripts/fetch-schemas.mjs && node --test test/app.test.mjs test/import.test.mjs",
+    "test": "node scripts/fetch-schemas.mjs && node --test test/app.test.mjs test/import.test.mjs test/templates.test.mjs",
     "import:dry": "node scripts/import.mjs",
     "import": "node scripts/import.mjs --apply"
   },

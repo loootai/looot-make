@@ -1,0 +1,137 @@
+{
+  "name": "Send a pre-call company brief to Slack with looot company data, news and LinkedIn posts",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": null,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#looot:enrichCompany",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "domain": "{{1.domain}}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:news.search",
+        "input": "{\"query\": \"{{ifempty(2.companyName; 1.domain)}}\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:linkedin.company.posts",
+        "input": "{\"url\": \"{{1.linkedin_url}}\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "openai-gpt-3:CreateCompletion",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "select": "chat",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Write a pre-call brief under 150 words: who they are in one line, what they posted or announced lately, and 2 talking points. Only use the data below.\n\nCompany: {{toString(2.result)}}\n\nNews: {{substring(toString(3.result); 0; 4000)}}\n\nLinkedIn posts: {{substring(toString(4.result); 0; 4000)}}"
+          }
+        ],
+        "max_tokens": "1200",
+        "temperature": "0.2",
+        "n_completions": "1",
+        "response_format": "text"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "slack:CreateMessage",
+      "version": 4,
+      "parameters": {},
+      "mapper": {
+        "channel": "YOUR_CHANNEL_ID",
+        "text": "*Brief for {{1.meeting}}: {{ifempty(2.companyName; 1.domain)}}*\n{{5.result}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1500,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

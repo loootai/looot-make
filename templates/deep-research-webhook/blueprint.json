@@ -1,0 +1,158 @@
+{
+  "name": "Answer a research question with Google results and page reads from looot and OpenAI",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": null,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:google.serp.organic",
+        "input": "{\"query\": \"{{1.question}}\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicFeeder",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "array": "{{slice(2.result.organic; 0; 5)}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:web.scrape.markdown",
+        "input": "{\"url\": \"{{3.link}}\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "util:TextAggregator",
+      "version": 1,
+      "parameters": {
+        "feeder": 3,
+        "rowSeparator": "\n"
+      },
+      "mapper": {
+        "value": "SOURCE {{3.link}}\n{{substring(toString(4.result); 0; 6000)}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "openai-gpt-3:CreateCompletion",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "select": "chat",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Answer this question in markdown: a 3 line summary, findings, then a Sources list with every URL you used. Only state what the sources say.\n\nQuestion: {{1.question}}\n\n{{5.text}}"
+          }
+        ],
+        "max_tokens": "1200",
+        "temperature": "0.2",
+        "n_completions": "1",
+        "response_format": "text"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1500,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 7,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "status": "200",
+        "body": "{{6.result}}",
+        "headers": [
+          {
+            "key": "content-type",
+            "value": "text/markdown; charset=utf-8"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 1800,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

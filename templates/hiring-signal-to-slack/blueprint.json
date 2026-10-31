@@ -1,0 +1,96 @@
+{
+  "name": "Get a Slack alert when a target account posts sales or RevOps jobs, with looot",
+  "flow": [
+    {
+      "id": 1,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:jobs.search",
+        "input": "{\"query\": \"sales\", \"company\": \"YOUR_TARGET_COMPANY\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "openai-gpt-3:CreateCompletion",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "select": "chat",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "From these job postings, keep roles at YOUR_TARGET_COMPANY whose title is about sales, SDR, BDR, account executive, RevOps or growth. List them as Slack lines \"- <url|title> (location)\". Reply NONE and nothing else when none match.\n\n{{substring(toString(1.result); 0; 8000)}}"
+          }
+        ],
+        "max_tokens": "1200",
+        "temperature": "0.2",
+        "n_completions": "1",
+        "response_format": "text"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "slack:CreateMessage",
+      "version": 4,
+      "parameters": {},
+      "mapper": {
+        "channel": "YOUR_CHANNEL_ID",
+        "text": "*YOUR_TARGET_COMPANY is hiring*\n{{2.result}}"
+      },
+      "filter": {
+        "name": "Has matches",
+        "conditions": [
+          [
+            {
+              "a": "{{2.result}}",
+              "o": "text:notequal",
+              "b": "NONE"
+            }
+          ]
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "name": "Post a daily Slack digest of Google News articles about a competitor with looot",
+  "flow": [
+    {
+      "id": 1,
+      "module": "app#looot:runOperation",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "endpointId": "job:news.search",
+        "input": "{\"query\": \"YOUR_COMPETITOR\"}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "openai-gpt-3:CreateCompletion",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "select": "chat",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "From this Google News result, list up to 5 articles about YOUR_COMPETITOR from the last 2 days as Slack lines: \"- <url|title> (source)\". Reply with NONE and nothing else when there is no such article.\n\n{{substring(toString(1.result); 0; 8000)}}"
+          }
+        ],
+        "max_tokens": "1200",
+        "temperature": "0.2",
+        "n_completions": "1",
+        "response_format": "text"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "slack:CreateMessage",
+      "version": 4,
+      "parameters": {},
+      "mapper": {
+        "channel": "YOUR_CHANNEL_ID",
+        "text": "*YOUR_COMPETITOR in the news*\n{{2.result}}\n_looot cost ${{1.actualCost}}_"
+      },
+      "filter": {
+        "name": "Has news",
+        "conditions": [
+          [
+            {
+              "a": "{{2.result}}",
+              "o": "text:notequal",
+              "b": "NONE"
+            }
+          ]
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

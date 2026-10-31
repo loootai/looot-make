@@ -1,0 +1,106 @@
+{
+  "name": "Verify and enrich new form leads with looot, then create HubSpot contacts",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": null,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "app#looot:verifyEmail",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "email": "{{1.email}}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "app#looot:enrichCompany",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "domain": "{{last(split(1.email; \"@\"))}}",
+        "fallback": true,
+        "maxCostUsd": 0.01,
+        "wait": 20
+      },
+      "filter": {
+        "name": "Email is valid",
+        "conditions": [
+          [
+            {
+              "a": "{{2.emailStatus}}",
+              "o": "text:equal",
+              "b": "valid"
+            }
+          ]
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "hubspotcrm:createContact",
+      "version": 2,
+      "parameters": {},
+      "mapper": {
+        "email": "{{1.email}}",
+        "firstname": "{{1.first_name}}",
+        "lastname": "{{1.last_name}}",
+        "company": "{{3.companyName}}",
+        "website": "{{3.companyDomain}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}
