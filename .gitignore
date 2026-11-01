@@ -3,3 +3,6 @@ node_modules/
 .secrets/
 .env
 .DS_Store
+
+# Local Make publishing kit (account-specific, may hold a token)
+make-publishing/
