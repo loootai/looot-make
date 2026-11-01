@@ -136,7 +136,7 @@ test('run modules send the documented POST /v1/runs body', async () => {
     assert.ok(communication.response.valid.condition.includes("body.status != 'failed'"));
   }
   const find = await readJson(path.join(SRC, manifest.components.module.findWorkEmail.codeFiles.communication));
-  assert.deepEqual(Object.keys(find.body.input), ['first_name', 'last_name', 'name', 'domain', 'company', 'linkedin_url']);
+  assert.deepEqual(Object.keys(find.body.input), ['first_name', 'last_name', 'domain', 'linkedin_url']);
 });
 
 test('every parameter a module reads is defined in its parameter files', async () => {

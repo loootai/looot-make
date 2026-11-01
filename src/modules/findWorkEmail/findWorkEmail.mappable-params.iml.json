@@ -10,23 +10,10 @@
         "label": "Last name"
     },
     {
-        "name": "fullName",
-        "type": "text",
-        "label": "Full name",
-        "help": "Use this when the name is in one field. Not needed with First name and Last name."
-    },
-    {
         "name": "domain",
         "type": "text",
         "label": "Company domain",
         "help": "For example `example.com`. A full URL also works; looot keeps the host."
-    },
-    {
-        "name": "company",
-        "type": "text",
-        "label": "Company name",
-        "advanced": true,
-        "help": "Use this when you have no domain."
     },
     {
         "name": "linkedinUrl",
