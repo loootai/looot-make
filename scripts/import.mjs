@@ -54,7 +54,7 @@ export async function buildPlan({ srcDir = SRC, existingApp = null, newAppName =
         name: newAppName,
         label: 'looot',
         version,
-        description: 'One key and one prepaid balance for 2,500+ data endpoints: work emails, email verification, company data.',
+        description: 'One key and one prepaid balance for 4,200+ data endpoints: work emails, email verification, company data.',
         theme: '#12a06a',
         language: 'en',
         audience: 'global',

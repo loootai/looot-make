@@ -4,8 +4,8 @@
 
 [![License](https://img.shields.io/github/license/loootai/looot-make)](LICENSE) [![Docs](https://img.shields.io/badge/docs-docs.looot.ai-12A06A)](https://docs.looot.ai)
 
-A Make custom app for [looot](https://looot.ai): one key and one prepaid balance for 2,500+ data endpoints
-from 90+ providers. A scenario can find a work email, verify it, enrich a company, or run any other
+A Make custom app for [looot](https://looot.ai): one key and one prepaid balance for 4,200+ data endpoints
+from 300+ providers. A scenario can find a work email, verify it, enrich a company, or run any other
 endpoint in the catalog. You see the price before a run and a failed call costs nothing.
 
 Status: source only. The files pass Make's own JSON schemas, but the app has not been created in a Make
