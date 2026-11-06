@@ -15,6 +15,11 @@
         "label": "Status"
     },
     {
+        "name": "outcome",
+        "type": "text",
+        "label": "Outcome"
+    },
+    {
         "name": "endpointId",
         "type": "text",
         "label": "Endpoint ID"
@@ -25,14 +30,14 @@
         "label": "Provider that answered"
     },
     {
-        "name": "outcome",
-        "type": "text",
-        "label": "Outcome"
-    },
-    {
         "name": "actualCost",
         "type": "number",
         "label": "Cost (USD)"
+    },
+    {
+        "name": "estimatedCost",
+        "type": "number",
+        "label": "Estimated cost (USD)"
     },
     {
         "name": "replayed",
@@ -51,7 +56,94 @@
     },
     {
         "name": "error",
+        "type": "collection",
+        "label": "Error",
+        "spec": [
+            {
+                "name": "code",
+                "type": "text",
+                "label": "Code"
+            },
+            {
+                "name": "message",
+                "type": "text",
+                "label": "Message"
+            },
+            {
+                "name": "whoseError",
+                "type": "text",
+                "label": "Whose error"
+            },
+            {
+                "name": "retryable",
+                "type": "boolean",
+                "label": "Retryable"
+            },
+            {
+                "name": "retryHint",
+                "type": "text",
+                "label": "Retry hint"
+            },
+            {
+                "name": "providerStatus",
+                "type": "text",
+                "label": "Provider status"
+            },
+            {
+                "name": "requestId",
+                "type": "text",
+                "label": "Request ID"
+            }
+        ]
+    },
+    {
+        "name": "errorClass",
+        "type": "text",
+        "label": "Error class"
+    },
+    {
+        "name": "providerResponseStatus",
+        "type": "text",
+        "label": "Provider response status"
+    },
+    {
+        "name": "createdAt",
+        "type": "date",
+        "label": "Created at"
+    },
+    {
+        "name": "startedAt",
+        "type": "date",
+        "label": "Started at"
+    },
+    {
+        "name": "completedAt",
+        "type": "date",
+        "label": "Completed at"
+    },
+    {
+        "name": "input",
         "type": "any",
-        "label": "Error"
+        "label": "Input"
+    },
+    {
+        "name": "requestedJob",
+        "type": "any",
+        "label": "Requested job"
+    },
+    {
+        "name": "route",
+        "type": "any",
+        "label": "Fallback route"
+    },
+    {
+        "name": "idempotencyKey",
+        "type": "text",
+        "label": "Idempotency key"
+    },
+    {
+        "name": "workspaceId",
+        "type": "text",
+        "label": "Workspace ID"
     }
 ]

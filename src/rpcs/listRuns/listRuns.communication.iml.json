@@ -1,0 +1,21 @@
+{
+    "url": "/v1/runs",
+    "method": "GET",
+    "qs": {
+        "limit": 50
+    },
+    "pagination": {
+        "qs": {
+            "cursor": "{{body.nextCursor}}"
+        },
+        "condition": "{{body.nextCursor != null}}"
+    },
+    "response": {
+        "limit": 150,
+        "iterate": "{{body.runs}}",
+        "output": {
+            "label": "{{item.endpointId}}, {{item.status}}, {{formatDate(item.createdAt, 'YYYY-MM-DD HH:mm')}}",
+            "value": "{{item.runId}}"
+        }
+    }
+}

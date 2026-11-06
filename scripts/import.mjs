@@ -14,6 +14,8 @@ const SRC = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'src')
 const MODULE_TYPE_IDS = { trigger: 1, action: 4, search: 9, instant_trigger: 10, responder: 11, universal: 12 };
 // Local code type -> API section name, per component type.
 const CONNECTION_SECTIONS = { communication: 'api', params: 'parameters' };
+const RPC_SECTIONS = { communication: 'api', staticParams: 'parameters' };
+const FUNCTION_SECTIONS = { code: 'code', test: 'test' };
 const MODULE_SECTIONS = {
   communication: 'api',
   epoch: 'epoch',
@@ -71,6 +73,12 @@ export async function buildPlan({ srcDir = SRC, existingApp = null, newAppName =
       method: 'POST',
       path: (names) => `/sdk/apps/${names.app}/connections`,
       json: () => ({ type: connection.connectionType, label: connection.label }),
+      // An existing app keeps its connection: reuse the one with the same label.
+      existing: (remote, names) => {
+        const found = remote.connections.find((item) => item.label === connection.label) ?? remote.connections[0];
+        if (found) names.connections[localId] = found.name;
+        return Boolean(found);
+      },
       capture: (answer, names) => {
         names.connections[localId] = answer.appConnection.name;
       },
@@ -95,6 +103,46 @@ export async function buildPlan({ srcDir = SRC, existingApp = null, newAppName =
     contentType: 'application/jsonc',
   });
 
+  for (const [name, fn] of Object.entries(manifest.components.function ?? {})) {
+    steps.push({
+      label: `create function ${name}`,
+      method: 'POST',
+      path: (names) => `/sdk/apps/${names.app}/${version}/functions`,
+      json: () => ({ name }),
+      existing: (remote) => remote.functions.some((item) => item.name === name),
+    });
+    for (const [codeType, section] of Object.entries(FUNCTION_SECTIONS)) {
+      const file = fn.codeFiles[codeType];
+      if (!file) continue;
+      steps.push({
+        label: `function ${name} ${section}`,
+        method: 'PUT',
+        path: (names) => `/sdk/apps/${names.app}/${version}/functions/${name}/${section}`,
+        text: await read(file),
+        contentType: 'application/javascript',
+      });
+    }
+  }
+
+  for (const [name, rpc] of Object.entries(manifest.components.rpc ?? {})) {
+    steps.push({
+      label: `create rpc ${name}`,
+      method: 'POST',
+      path: (names) => `/sdk/apps/${names.app}/${version}/rpcs`,
+      json: (names) => ({ name, label: rpc.label, connection: rpc.connection ? names.connections[rpc.connection] : null }),
+      existing: (remote) => remote.rpcs.some((item) => item.name === name),
+    });
+    for (const [codeType, section] of Object.entries(RPC_SECTIONS)) {
+      steps.push({
+        label: `rpc ${name} ${section}`,
+        method: 'PUT',
+        path: (names) => `/sdk/apps/${names.app}/${version}/rpcs/${name}/${section}`,
+        text: await read(rpc.codeFiles[codeType]),
+        contentType: 'application/jsonc',
+      });
+    }
+  }
+
   for (const [name, module] of Object.entries(manifest.components.module)) {
     steps.push({
       label: `create module ${name}`,
@@ -110,6 +158,13 @@ export async function buildPlan({ srcDir = SRC, existingApp = null, newAppName =
         ...(module.moduleType === 'action' ? { crud: module.actionCrud ?? null } : {}),
         ...(module.moduleType === 'universal' ? { subtype: 'Universal' } : {}),
       }),
+      // An existing module keeps its name and type; only its label and description change.
+      existing: (remote) => remote.modules.some((item) => item.name === name),
+      update: {
+        method: 'PATCH',
+        path: (names) => `/sdk/apps/${names.app}/${version}/modules/${name}`,
+        json: () => ({ label: module.label, description: module.description }),
+      },
     });
     for (const [codeType, section] of Object.entries(MODULE_SECTIONS)) {
       const file = module.codeFiles[codeType];
@@ -141,10 +196,42 @@ export async function buildPlan({ srcDir = SRC, existingApp = null, newAppName =
   return steps;
 }
 
+/** Lists what an existing app already has, so a re-upload updates it instead of creating twice. */
+async function fetchRemote(baseUrl, token, app, version = 1) {
+  const get = async (path, key) => {
+    const response = await fetch(`${baseUrl}${path}`, { headers: { Authorization: `Token ${token}` } });
+    if (!response.ok) throw new Error(`GET ${path} answered HTTP ${response.status}`);
+    return (await response.json())[key] ?? [];
+  };
+  return {
+    connections: await get(`/sdk/apps/${app}/connections`, 'appConnections'),
+    modules: await get(`/sdk/apps/${app}/${version}/modules`, 'appModules'),
+    rpcs: await get(`/sdk/apps/${app}/${version}/rpcs`, 'appRpcs'),
+    functions: await get(`/sdk/apps/${app}/${version}/functions`, 'appFunctions'),
+  };
+}
+
+const sendStep = async (url, method, token, contentType, body) => {
+  const response = await fetch(url, { method, headers: { Authorization: `Token ${token}`, 'Content-Type': contentType }, body });
+  return { response, text: await response.text() };
+};
+
 /** Sends the plan in order. Stops at the first answer that is not 2xx. */
 export async function runPlan(steps, { baseUrl, token, existingApp = null, apply = false, log = console.log }) {
   const names = { app: existingApp ?? '<app name Make returns>', connections: {} };
+  const remote = apply && existingApp ? await fetchRemote(baseUrl, token, existingApp) : null;
   for (const step of steps) {
+    if (remote && step.existing && step.existing(remote, names)) {
+      if (!step.update) {
+        log(`skip ${step.label} (already in the app)`);
+        continue;
+      }
+      const url = `${baseUrl}${step.update.path(names)}`;
+      const { response, text } = await sendStep(url, step.update.method, token, 'application/json', JSON.stringify(step.update.json(names)));
+      if (!response.ok) throw new Error(`${step.label} failed: ${step.update.method} ${url} answered HTTP ${response.status} ${text.slice(0, 500)}`);
+      log(`ok  ${step.update.method} ${url}  (${step.label}: update label and description)`);
+      continue;
+    }
     const url = `${baseUrl}${step.path(names)}`;
     if (!apply) {
       log(`${step.method} ${url}  (${step.label})`);
@@ -154,12 +241,7 @@ export async function runPlan(steps, { baseUrl, token, existingApp = null, apply
       continue;
     }
     const body = step.json ? JSON.stringify(step.json(names)) : step.text;
-    const response = await fetch(url, {
-      method: step.method,
-      headers: { Authorization: `Token ${token}`, 'Content-Type': step.json ? 'application/json' : step.contentType },
-      body,
-    });
-    const answerText = await response.text();
+    const { response, text: answerText } = await sendStep(url, step.method, token, step.json ? 'application/json' : step.contentType, body);
     if (!response.ok) {
       throw new Error(`${step.label} failed: ${step.method} ${url} answered HTTP ${response.status} ${answerText.slice(0, 500)}`);
     }
@@ -167,6 +249,40 @@ export async function runPlan(steps, { baseUrl, token, existingApp = null, apply
     log(`ok  ${step.method} ${url}  (${step.label})`);
   }
   return names;
+}
+
+const stripComments = (text) => text.replace(/^\s*\/\/.*$/gm, '');
+const sameJson = (a, b) => JSON.stringify(sortKeys(a)) === JSON.stringify(sortKeys(b));
+const sortKeys = (value) =>
+  Array.isArray(value)
+    ? value.map(sortKeys)
+    : value && typeof value === 'object'
+      ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, sortKeys(value[key])]))
+      : value;
+
+/** Reads every uploaded section back and compares it with the local file. Returns the mismatches. */
+export async function readBack(steps, { baseUrl, token, names, log = console.log }) {
+  const mismatches = [];
+  for (const step of steps.filter((item) => item.method === 'PUT')) {
+    const url = `${baseUrl}${step.path(names)}`;
+    const response = await fetch(url, { headers: { Authorization: `Token ${token}` } });
+    const text = await response.text();
+    let same = false;
+    if (response.ok) {
+      if (step.contentType === 'application/jsonc' || step.contentType === 'application/json') {
+        try {
+          same = sameJson(JSON.parse(text), JSON.parse(stripComments(step.text)));
+        } catch {
+          same = false;
+        }
+      } else {
+        same = text.trim() === step.text.trim();
+      }
+    }
+    if (!same) mismatches.push(`${step.label} (HTTP ${response.status})`);
+    log(`${same ? 'same' : 'DIFF'}  GET ${url}  (${step.label})`);
+  }
+  return mismatches;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
@@ -185,7 +301,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     apply: options.apply,
   });
   if (options.apply) {
-    console.log(`\nDone: ${steps.length} calls. App "${names.app}" is in your Make account under Custom apps.`);
+    const mismatches = await readBack(steps, { baseUrl: `https://${zone}/api/v2`, token, names });
+    console.log(`\nDone: ${steps.length} steps. App "${names.app}" is in your Make account under Custom apps.`);
+    console.log(mismatches.length === 0 ? 'Read back: every section matches the local files.' : `Read back: ${mismatches.length} sections differ:\n${mismatches.join('\n')}`);
+    if (mismatches.length > 0) process.exitCode = 1;
   } else {
     console.log(`\nDry run: ${steps.length} calls planned, none sent. Add --apply to send them.`);
   }

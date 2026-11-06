@@ -1,5 +1,10 @@
 [
     {
+        "name": "workspaceId",
+        "type": "text",
+        "label": "Workspace ID"
+    },
+    {
         "name": "currency",
         "type": "text",
         "label": "Currency"
@@ -7,16 +12,110 @@
     {
         "name": "available",
         "type": "number",
-        "label": "Available"
+        "label": "Available (USD)"
     },
     {
         "name": "reserved",
         "type": "number",
-        "label": "Reserved"
+        "label": "Reserved (USD)"
+    },
+    {
+        "name": "availableMicros",
+        "type": "number",
+        "label": "Available (millionths of a dollar)"
+    },
+    {
+        "name": "reservedMicros",
+        "type": "number",
+        "label": "Reserved (millionths of a dollar)"
+    },
+    {
+        "name": "recentSpendMicros",
+        "type": "number",
+        "label": "Recent spend (millionths of a dollar)"
+    },
+    {
+        "name": "trialCreditMicros",
+        "type": "number",
+        "label": "Trial credit (millionths of a dollar)"
+    },
+    {
+        "name": "holds",
+        "type": "array",
+        "label": "Holds"
     },
     {
         "name": "topUpUrl",
         "type": "url",
-        "label": "Top-up URL"
+        "label": "Top-up API URL"
+    },
+    {
+        "name": "topUp",
+        "type": "collection",
+        "label": "Top-up limits",
+        "spec": [
+            {
+                "name": "route",
+                "type": "text",
+                "label": "Route"
+            },
+            {
+                "name": "available",
+                "type": "boolean",
+                "label": "Available"
+            },
+            {
+                "name": "currency",
+                "type": "text",
+                "label": "Currency"
+            },
+            {
+                "name": "minMicros",
+                "type": "number",
+                "label": "Minimum (millionths of a dollar)"
+            },
+            {
+                "name": "maxMicros",
+                "type": "number",
+                "label": "Maximum (millionths of a dollar)"
+            }
+        ]
+    },
+    {
+        "name": "topUpLink",
+        "type": "collection",
+        "label": "Top-up link",
+        "spec": [
+            {
+                "name": "minimumUsd",
+                "type": "number",
+                "label": "Minimum top-up (USD)"
+            },
+            {
+                "name": "suggestedUsd",
+                "type": "number",
+                "label": "Suggested top-up (USD)"
+            },
+            {
+                "name": "dashboardUrl",
+                "type": "url",
+                "label": "Dashboard URL"
+            },
+            {
+                "name": "checkoutUrl",
+                "type": "url",
+                "label": "Checkout URL"
+            },
+            {
+                "name": "message",
+                "type": "text",
+                "label": "Message"
+            },
+            {
+                "name": "reason",
+                "type": "text",
+                "label": "Reason"
+            }
+        ]
     }
 ]

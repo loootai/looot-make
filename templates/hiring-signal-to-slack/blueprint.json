@@ -8,6 +8,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:jobs.search",
+        "inputMode": "json",
         "input": "{\"query\": \"sales\", \"company\": \"YOUR_TARGET_COMPANY\"}",
         "fallback": true,
         "maxCostUsd": 0.01,

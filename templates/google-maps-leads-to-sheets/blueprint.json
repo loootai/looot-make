@@ -29,6 +29,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:maps.local.search",
+        "inputMode": "json",
         "input": "{\"query\": \"{{1.`0`}} in {{1.`1`}}\"}",
         "fallback": true,
         "maxCostUsd": 0.01,

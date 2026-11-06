@@ -17,15 +17,20 @@
     {
         "label": "Runs",
         "modules": [
+            "watchFinishedRuns",
             "runOperation",
-            "getRun",
-            "watchFinishedRuns"
+            "getRun"
+        ]
+    },
+    {
+        "label": "Workspace",
+        "modules": [
+            "getBalance"
         ]
     },
     {
         "label": "Other",
         "modules": [
-            "getBalance",
             "makeApiCall"
         ]
     }

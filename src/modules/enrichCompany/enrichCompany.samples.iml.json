@@ -5,7 +5,12 @@
     "size": "51-200",
     "runId": "run_01J9ZK2Q7W8X",
     "status": "completed",
+    "outcome": "hit",
+    "endpointId": "job:company.enrich",
+    "servedProviderId": "icypeas",
     "actualCost": 0.0019,
+    "estimatedCost": 0.0019,
     "replayed": false,
-    "endpointId": "job:company.enrich"
+    "createdAt": "2026-11-05T10:00:00.000Z",
+    "completedAt": "2026-11-05T10:00:02.000Z"
 }

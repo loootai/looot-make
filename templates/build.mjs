@@ -14,7 +14,7 @@ export const APP = 'app#looot';
 // ---- module helpers -------------------------------------------------------------------------------
 const looot = (id, fn, mapper, extra = {}) => ({ id, module: `${APP}:${fn}`, version: 1, parameters: {}, mapper, ...extra });
 const run = (id, endpointId, input, maxCostUsd, extra = {}) =>
-  looot(id, 'runOperation', { endpointId, input, fallback: true, maxCostUsd, wait: 20 }, extra);
+  looot(id, 'runOperation', { endpointId, inputMode: 'json', input, fallback: true, maxCostUsd, wait: 20 }, extra);
 const webhook = (id) => ({ id, module: 'gateway:CustomWebHook', version: 1, parameters: { hook: null, maxResults: 1 }, mapper: {} });
 const respond = (id, body) => ({ id, module: 'gateway:WebhookRespond', version: 1, parameters: {}, mapper: { status: '200', body, headers: [{ key: 'content-type', value: 'text/markdown; charset=utf-8' }] } });
 const watchRows = (id, sheetId, limit = 10) => ({
@@ -132,7 +132,7 @@ export const TEMPLATES = [
     cost: 'about $0.005 per found email',
     flow: [
       watchRows(1, 'Leads', 50),
-      looot(2, 'findWorkEmail', { firstName: col(1, 0), lastName: col(1, 1), domain: col(1, 2), fallback: true, maxCostUsd: 0.05, wait: 20 }, filter('No email yet', missing(col(1, 3)))),
+      looot(2, 'findWorkEmail', { first_name: col(1, 0), last_name: col(1, 1), domain: col(1, 2), fallback: true, maxCostUsd: 0.05, wait: 20 }, filter('No email yet', missing(col(1, 3)))),
       router(3, [
         [
           looot(4, 'verifyEmail', { email: '{{2.email}}', fallback: true, maxCostUsd: 0.01, wait: 20 }, filter('Email found', exists('{{2.email}}'))),
@@ -271,7 +271,7 @@ export const TEMPLATES = [
     cost: 'about $0.005 per found email',
     flow: [
       watchRows(1, 'Profiles', 50),
-      looot(2, 'findWorkEmail', { linkedinUrl: col(1, 0), fallback: true, maxCostUsd: 0.05, wait: 20 }),
+      looot(2, 'findWorkEmail', { linkedin_url: col(1, 0), fallback: true, maxCostUsd: 0.05, wait: 20 }),
       looot(3, 'verifyEmail', { email: '{{2.email}}', fallback: true, maxCostUsd: 0.01, wait: 20 }, filter('Email found', exists('{{2.email}}'))),
       updateRow(4, 1, { 1: '{{2.email}}', 2: '{{3.emailStatus}}', 3: '{{2.actualCost + 3.actualCost}}' }),
     ],
@@ -361,7 +361,7 @@ ${sheetNotes.join('\n')}
 
 - No blueprint has been imported or run in Make. Module names and versions for Google Sheets, Slack, HubSpot, OpenAI, Webhooks, JSON, the iterator, the router and the text aggregator come from Make's own examples in \`integromat/make-skills\` (read 2026-10-31). Make may ask you to re-pick a field after import.
 - The \`app#looot\` prefix is how Make writes custom app modules in a blueprint. Whether an approved, public looot app keeps that prefix is not known yet.
-- The run module's Input is a JSON field. A mapped value that contains a double quote breaks that JSON. Clean such values with \`replace()\` first.
+- The run module's Input is JSON text, which the module parses and sends as an object. A mapped value that contains a double quote breaks that JSON. Clean such values with \`replace()\` first.
 - Paths such as \`{{2.result.organic}}\` depend on the provider that answered. The templates pass \`toString(result)\` to OpenAI where the shape varies.
 - The HubSpot \`company\` and \`website\` fields and OpenAI's \`json_object\` response format are taken from the apps' usual field names, not read from Make.
 

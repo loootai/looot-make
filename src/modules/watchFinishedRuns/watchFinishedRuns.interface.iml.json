@@ -20,6 +20,16 @@
         "label": "Status"
     },
     {
+        "name": "outcome",
+        "type": "text",
+        "label": "Outcome"
+    },
+    {
+        "name": "providerResponseStatus",
+        "type": "text",
+        "label": "Provider response status"
+    },
+    {
         "name": "createdAt",
         "type": "date",
         "label": "Created at"

@@ -8,6 +8,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:news.search",
+        "inputMode": "json",
         "input": "{\"query\": \"YOUR_COMPETITOR\"}",
         "fallback": true,
         "maxCostUsd": 0.01,

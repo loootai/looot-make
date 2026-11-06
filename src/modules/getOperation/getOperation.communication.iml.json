@@ -1,7 +1,10 @@
 {
-    "url": "/v1/operations/{{parameters.endpointId}}",
+    "url": "/v1/operations/{{trim(parameters.endpointId)}}",
     "method": "GET",
     "response": {
-        "output": "{{body}}"
+        "output": {
+            "{{...}}": "{{body}}",
+            "verifiedAt": "{{if(body.verifiedAt, parseDate(body.verifiedAt), undefined)}}"
+        }
     }
 }

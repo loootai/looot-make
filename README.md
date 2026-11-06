@@ -14,7 +14,7 @@ account or run in a scenario yet. See "Not checked yet" before you rely on it.
 ## What is in the app
 
 `src/` holds the app in the layout the Make Apps SDK for VS Code uses for local development: one
-`makecomapp.json` manifest, the base, one connection and ten modules, 59 files.
+`makecomapp.json` manifest, the base, one connection, ten modules and three RPCs, 65 files.
 
 | Module | Type | REST route | Cost |
 |---|---|---|---|
@@ -22,11 +22,11 @@ account or run in a scenario yet. See "Not checked yet" before you rely on it.
 | Verify an email | action | `POST /v1/runs` with `job:people.email.verify` | from $0.00145 per call |
 | Enrich a company | action | `POST /v1/runs` with `job:company.enrich` | from $0.0019 per call |
 | Run an operation | action | `POST /v1/runs` with any endpoint or `job:<id>` | the endpoint's price |
-| Search operations | search | `GET /v1/catalog/search?q=` | free |
-| Get an operation | action | `GET /v1/operations/{endpointId}` | free |
-| Get a run | action | `GET /v1/runs/{runId}` | free |
+| Search operations | search | `GET /v1/catalog/search?q=`, 100 per page, `offset` until `nextOffset` is null | free |
+| Get an operation | action | `GET /v1/operations/{endpointId}` (endpoints only, not `job:` ids) | free |
+| Get a run | action | `GET /v1/runs/{runId}`; the Run ID list comes from `GET /v1/runs` | free |
 | Get the balance | action | `GET /v1/balance` | free |
-| Watch finished runs | polling trigger | `GET /v1/runs?limit=50` | free |
+| Watch finished runs | polling trigger | `GET /v1/runs?limit=50`, newest first, `cursor` paging | free |
 | Make an API call | universal | any path under `https://api.looot.ai` | depends on the call |
 
 Prices are the cheapest provider of each job in the public catalog
@@ -43,7 +43,10 @@ masks that header in Make's logs.
 ### How a run module behaves
 
 - **Body.** `{"endpointId", "input", "idempotencyKey", "wait", "fallback"}`, the same body the looot n8n
-  node sends.
+  node sends. `input` is always an object. The Leads modules name their fields after the job's own input
+  names (`first_name`, `last_name`, `domain`, `linkedin_url`, `email`, `name`) and pass them through as
+  they are. Run an operation takes JSON text, which it parses, or one field per input of the picked
+  endpoint, read from `GET /v1/operations/{id}` (or the job's `jobInputs` for a `job:` id).
 - **Try other providers** is on by default and sends `fallback: true`. With Max cost (USD) filled it sends
   `{"enabled": true, "maxCostUsd": <n>}`. looot tries the next provider of the same job when the first
   finds nothing and charges only the attempts that ran.
@@ -53,9 +56,10 @@ masks that header in Make's logs.
 - **Idempotency key.** Empty by default. The module then sends `make-` plus the SHA-256 of the endpoint,
   the module's input and the UTC date. Running the same lookup again on the same day replays the first
   run and pays once. Fill the field to use your own key.
-- **Output.** `runId`, `status`, `actualCost`, the provider's raw `result` and looot's
-  [normalized output](https://docs.looot.ai/concepts/normalized-output). Find a work email adds `email`
-  and `check`. Verify an email adds `emailStatus` and `deliverable`. Enrich a company adds `companyName`,
+- **Output.** The API response as it is (`runId`, `status`, `outcome`, `actualCost`, the provider's raw
+  `result`, looot's [normalized output](https://docs.looot.ai/concepts/normalized-output) and the rest),
+  with `createdAt`, `startedAt` and `completedAt` parsed as dates. Find a work email adds `email`
+  and `emailCheck`. Verify an email adds `emailStatus` and `deliverable`. Enrich a company adds `companyName`,
   `companyDomain`, `industry` and `size`. These are empty when the provider that answered has no field
   map; `result` is always there.
 - **Errors.** looot answers HTTP 201 even when a run failed before it started, so each run module marks a
@@ -71,13 +75,14 @@ token with the `sdk-apps:read` and `sdk-apps:write` scopes (Make profile, API ac
 
 ```bash
 git clone https://github.com/loootai/looot-make && cd looot-make
-node scripts/import.mjs                  # dry run: prints the 68 calls, sends nothing
+node scripts/import.mjs                  # dry run: prints the 77 calls, sends nothing
 MAKE_API_TOKEN=<token> MAKE_ZONE=eu1.make.com node scripts/import.mjs --apply
 ```
 
 `MAKE_ZONE` is the host you see in the browser when you use Make (`eu1.make.com`, `eu2.make.com`,
-`us1.make.com`, `us2.make.com`). The script creates the app, the connection and the ten modules through
-`/api/v2/sdk/apps`, then uploads each code file. It stops at the first call Make refuses and prints
+`us1.make.com`, `us2.make.com`). The script creates the app, the connection, three RPCs and the ten modules
+through `/api/v2/sdk/apps`, then uploads each code file. With `--app <name>` it updates that app in
+place: it keeps its connection, updates existing modules, then reads every section back. It stops at the first call Make refuses and prints
 Make's answer. To load the files into an app that already exists, add `--app <app name>`.
 
 ### Option B: VS Code

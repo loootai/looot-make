@@ -5,9 +5,24 @@
         "label": "Endpoint ID"
     },
     {
+        "name": "name",
+        "type": "text",
+        "label": "Name"
+    },
+    {
+        "name": "description",
+        "type": "text",
+        "label": "Description"
+    },
+    {
         "name": "provider",
         "type": "text",
         "label": "Provider"
+    },
+    {
+        "name": "providerId",
+        "type": "text",
+        "label": "Provider ID"
     },
     {
         "name": "capability",
@@ -15,9 +30,81 @@
         "label": "Job ID"
     },
     {
+        "name": "sourceCapability",
+        "type": "text",
+        "label": "Source job ID"
+    },
+    {
+        "name": "job",
+        "type": "collection",
+        "label": "Job",
+        "spec": [
+            {
+                "name": "id",
+                "type": "text",
+                "label": "Job ID"
+            },
+            {
+                "name": "title",
+                "type": "text",
+                "label": "Title"
+            },
+            {
+                "name": "description",
+                "type": "text",
+                "label": "Description"
+            },
+            {
+                "name": "subject",
+                "type": "text",
+                "label": "Subject"
+            },
+            {
+                "name": "kind",
+                "type": "text",
+                "label": "Kind"
+            },
+            {
+                "name": "platformLabel",
+                "type": "text",
+                "label": "Platform"
+            },
+            {
+                "name": "categoryLabel",
+                "type": "text",
+                "label": "Category"
+            },
+            {
+                "name": "hidden",
+                "type": "boolean",
+                "label": "Hidden"
+            },
+            {
+                "name": "known",
+                "type": "boolean",
+                "label": "Known job"
+            }
+        ]
+    },
+    {
+        "name": "category",
+        "type": "text",
+        "label": "Category"
+    },
+    {
+        "name": "platform",
+        "type": "text",
+        "label": "Platform"
+    },
+    {
         "name": "estimatedPrice",
         "type": "number",
         "label": "Price (USD)"
+    },
+    {
+        "name": "customerPrice",
+        "type": "number",
+        "label": "Your price (USD)"
     },
     {
         "name": "priceBasis",
@@ -25,8 +112,260 @@
         "label": "Price basis"
     },
     {
-        "name": "costPerSuccessUsd",
+        "name": "price",
+        "type": "collection",
+        "label": "Price",
+        "spec": [
+            {
+                "name": "currency",
+                "type": "text",
+                "label": "Currency"
+            },
+            {
+                "name": "perCall",
+                "type": "number",
+                "label": "Price per call (USD)"
+            },
+            {
+                "name": "estimateFormula",
+                "type": "text",
+                "label": "Price formula"
+            }
+        ]
+    },
+    {
+        "name": "unpriced",
+        "type": "boolean",
+        "label": "Unpriced"
+    },
+    {
+        "name": "executionMode",
+        "type": "text",
+        "label": "Execution mode"
+    },
+    {
+        "name": "access",
+        "type": "text",
+        "label": "Access"
+    },
+    {
+        "name": "runnableNow",
+        "type": "boolean",
+        "label": "Runnable now"
+    },
+    {
+        "name": "readyToRun",
+        "type": "boolean",
+        "label": "Ready to run"
+    },
+    {
+        "name": "unavailableReason",
+        "type": "text",
+        "label": "Why it is unavailable"
+    },
+    {
+        "name": "connected",
+        "type": "boolean",
+        "label": "Your own account connected"
+    },
+    {
+        "name": "platformSupply",
+        "type": "boolean",
+        "label": "Runs on looot keys"
+    },
+    {
+        "name": "keyless",
+        "type": "boolean",
+        "label": "Keyless"
+    },
+    {
+        "name": "verified",
+        "type": "boolean",
+        "label": "Verified"
+    },
+    {
+        "name": "verifiedAt",
+        "type": "date",
+        "label": "Verified at"
+    },
+    {
+        "name": "eligibility",
+        "type": "text",
+        "label": "Eligibility"
+    },
+    {
+        "name": "credential",
+        "type": "text",
+        "label": "Credential"
+    },
+    {
+        "name": "authType",
+        "type": "text",
+        "label": "Provider auth type"
+    },
+    {
+        "name": "method",
+        "type": "text",
+        "label": "Provider HTTP method"
+    },
+    {
+        "name": "path",
+        "type": "text",
+        "label": "Provider path"
+    },
+    {
+        "name": "host",
+        "type": "text",
+        "label": "Provider host"
+    },
+    {
+        "name": "bundleKind",
+        "type": "text",
+        "label": "Bundle kind"
+    },
+    {
+        "name": "mock",
+        "type": "boolean",
+        "label": "Mock"
+    },
+    {
+        "name": "effectClassification",
+        "type": "text",
+        "label": "Effect"
+    },
+    {
+        "name": "availability",
+        "type": "text",
+        "label": "Availability"
+    },
+    {
+        "name": "publishedAt",
+        "type": "date",
+        "label": "Published at"
+    },
+    {
+        "name": "version",
         "type": "number",
-        "label": "Cost per success (USD)"
+        "label": "Version"
+    },
+    {
+        "name": "matchedBy",
+        "type": "text",
+        "label": "Matched by"
+    },
+    {
+        "name": "stats",
+        "type": "collection",
+        "label": "Stats (30 days)",
+        "spec": [
+            {
+                "name": "source",
+                "type": "text",
+                "label": "Source"
+            },
+            {
+                "name": "window",
+                "type": "text",
+                "label": "Window"
+            },
+            {
+                "name": "calls",
+                "type": "number",
+                "label": "Calls"
+            },
+            {
+                "name": "successRate",
+                "type": "number",
+                "label": "Success rate"
+            },
+            {
+                "name": "p50Ms",
+                "type": "number",
+                "label": "Median latency (ms)"
+            },
+            {
+                "name": "p95Ms",
+                "type": "number",
+                "label": "p95 latency (ms)"
+            },
+            {
+                "name": "lastSuccessAt",
+                "type": "text",
+                "label": "Last success (UTC, as looot writes it)"
+            },
+            {
+                "name": "qualified",
+                "type": "boolean",
+                "label": "Enough calls to rank"
+            }
+        ]
+    },
+    {
+        "name": "facts",
+        "type": "collection",
+        "label": "Ranking facts",
+        "spec": [
+            {
+                "name": "prefer",
+                "type": "text",
+                "label": "Order used"
+            },
+            {
+                "name": "job",
+                "type": "text",
+                "label": "Job ID"
+            },
+            {
+                "name": "bucket",
+                "type": "text",
+                "label": "Bucket"
+            },
+            {
+                "name": "pricePerUnitUsd",
+                "type": "number",
+                "label": "Price per unit (USD)"
+            },
+            {
+                "name": "costPerSuccessUsd",
+                "type": "number",
+                "label": "Cost per success (USD)"
+            },
+            {
+                "name": "medianChargeUsd",
+                "type": "number",
+                "label": "Median charge (USD)"
+            },
+            {
+                "name": "p50Ms",
+                "type": "number",
+                "label": "Median latency (ms)"
+            },
+            {
+                "name": "async",
+                "type": "boolean",
+                "label": "Async"
+            },
+            {
+                "name": "requiredInputs",
+                "type": "array",
+                "label": "Required inputs",
+                "spec": {
+                    "type": "text"
+                }
+            },
+            {
+                "name": "success",
+                "type": "any",
+                "label": "Success"
+            }
+        ]
+    },
+    {
+        "name": "examples",
+        "type": "array",
+        "label": "Examples",
+        "spec": {
+            "type": "text"
+        }
     }
 ]

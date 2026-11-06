@@ -1,5 +1,12 @@
 {
+    "workspaceId": "00000000-0000-0000-0000-000000000000",
     "currency": "USD",
     "available": 4.2,
-    "reserved": 0
+    "reserved": 0,
+    "availableMicros": 4200000,
+    "reservedMicros": 0,
+    "topUpLink": {
+        "minimumUsd": 5,
+        "dashboardUrl": "https://looot.ai/usage?top_up=1"
+    }
 }

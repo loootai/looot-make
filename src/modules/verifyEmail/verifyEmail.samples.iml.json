@@ -4,7 +4,12 @@
     "deliverable": true,
     "runId": "run_01J9ZK2Q7W8X",
     "status": "completed",
-    "actualCost": 0.00145,
+    "outcome": "hit",
+    "endpointId": "job:people.email.verify",
+    "servedProviderId": "icypeas",
+    "actualCost": 0.0019,
+    "estimatedCost": 0.0019,
     "replayed": false,
-    "endpointId": "job:people.email.verify"
+    "createdAt": "2026-11-05T10:00:00.000Z",
+    "completedAt": "2026-11-05T10:00:02.000Z"
 }

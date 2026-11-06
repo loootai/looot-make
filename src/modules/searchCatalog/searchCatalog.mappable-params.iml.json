@@ -31,11 +31,18 @@
         ]
     },
     {
-        "name": "maxPriceMicros",
-        "type": "uinteger",
-        "label": "Max price (millionths of a dollar)",
+        "name": "maxPriceUsd",
+        "type": "number",
+        "label": "Max price (USD)",
         "advanced": true,
-        "help": "Leaves out endpoints that cost more than this. `2000` is $0.002."
+        "help": "Leaves out endpoints that cost more than this per call, for example `0.002`."
+    },
+    {
+        "name": "capability",
+        "type": "text",
+        "label": "Job ID",
+        "advanced": true,
+        "help": "Only endpoints of this job, for example `people.email.find`."
     },
     {
         "name": "category",
@@ -48,17 +55,19 @@
         "name": "provider",
         "type": "text",
         "label": "Provider",
-        "advanced": true
+        "advanced": true,
+        "help": "A provider ID, for example `icypeas`."
     },
     {
         "name": "limit",
         "type": "uinteger",
         "label": "Limit",
         "default": 10,
-        "help": "The maximum number of results to return, from 1 to 200.",
+        "required": true,
         "validate": {
             "min": 1,
-            "max": 200
-        }
+            "max": 1000
+        },
+        "help": "Maximum number of results to return and work with during one execution cycle."
     }
 ]

@@ -1,9 +1,11 @@
 [
     {
         "name": "runId",
-        "type": "text",
+        "type": "select",
         "label": "Run ID",
         "required": true,
-        "help": "The Run ID a run module returned."
+        "mode": "edit",
+        "options": "rpc://listRuns",
+        "help": "Pick one of your latest runs, or map the Run ID a run module returned."
     }
 ]

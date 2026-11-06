@@ -4,18 +4,28 @@
     "qs": {
         "limit": 50
     },
+    "pagination": {
+        "qs": {
+            "cursor": "{{body.nextCursor}}"
+        },
+        "condition": "{{body.nextCursor != null}}"
+    },
     "response": {
         "limit": "{{parameters.limit}}",
         "iterate": {
             "container": "{{body.runs}}",
             "condition": "{{item.status == 'completed' || item.status == 'failed' || item.status == 'blocked' || item.status == 'stopped'}}"
         },
-        "output": "{{item}}",
+        "output": {
+            "{{...}}": "{{item}}",
+            "createdAt": "{{if(item.createdAt, parseDate(item.createdAt), undefined)}}",
+            "completedAt": "{{if(item.completedAt, parseDate(item.completedAt), undefined)}}"
+        },
         "trigger": {
             "id": "{{item.runId}}",
-            "date": "{{ifempty(item.completedAt, item.createdAt)}}",
+            "date": "{{parseDate(item.createdAt)}}",
             "type": "date",
-            "order": "unordered"
+            "order": "desc"
         }
     }
 }

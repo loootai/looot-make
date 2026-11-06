@@ -29,6 +29,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:company.technographics",
+        "inputMode": "json",
         "input": "{\"domain\": \"{{1.`0`}}\"}",
         "fallback": true,
         "maxCostUsd": 0.02,

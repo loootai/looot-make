@@ -28,7 +28,7 @@
       "version": 1,
       "parameters": {},
       "mapper": {
-        "linkedinUrl": "{{1.`0`}}",
+        "linkedin_url": "{{1.`0`}}",
         "fallback": true,
         "maxCostUsd": 0.05,
         "wait": 20

@@ -3,15 +3,27 @@
     "method": "GET",
     "qs": {
         "q": "{{parameters.query}}",
-        "limit": "{{ifempty(parameters.limit, 10)}}",
+        "limit": 100,
+        "offset": 0,
         "prefer": "{{parameters.prefer}}",
-        "maxPriceMicros": "{{parameters.maxPriceMicros}}",
+        "maxPriceMicros": "{{if(parameters.maxPriceUsd, parameters.maxPriceUsd * 1000000, undefined)}}",
+        "capability": "{{parameters.capability}}",
         "category": "{{parameters.category}}",
         "provider": "{{parameters.provider}}"
     },
+    "pagination": {
+        "qs": {
+            "offset": "{{(pagination.page - 1) * 100}}"
+        },
+        "condition": "{{body.nextOffset != null}}"
+    },
     "response": {
-        "iterate": "{{body.items}}",
+        "iterate": "{{body.endpoints}}",
         "limit": "{{ifempty(parameters.limit, 10)}}",
-        "output": "{{item}}"
+        "output": {
+            "{{...}}": "{{item}}",
+            "publishedAt": "{{if(item.publishedAt, parseDate(item.publishedAt), undefined)}}",
+            "verifiedAt": "{{if(item.verifiedAt, parseDate(item.verifiedAt), undefined)}}"
+        }
     }
 }

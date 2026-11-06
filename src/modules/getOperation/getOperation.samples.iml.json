@@ -1,1 +1,51 @@
-{}
+{
+    "endpoint": {
+        "id": "icypeas-email-verify",
+        "name": "Icypeas / Verify an email address",
+        "capability": "people.email.verify",
+        "provider": "Icypeas",
+        "providerId": "icypeas",
+        "executionMode": "async",
+        "price": {
+            "currency": "USD",
+            "perCall": 0.0019,
+            "estimateFormula": "$0.0019 per call"
+        }
+    },
+    "inputSchema": {
+        "type": "object",
+        "required": [
+            "email"
+        ],
+        "properties": {
+            "email": {
+                "type": "string",
+                "format": "email",
+                "description": "The email address to verify."
+            }
+        }
+    },
+    "uiSchema": {
+        "order": [
+            "email",
+            "custom"
+        ],
+        "labels": {},
+        "widgets": {}
+    },
+    "estimatedMaxCost": 0.0019,
+    "priceRange": {
+        "minMicros": 1900,
+        "maxMicros": 1900,
+        "scalesWith": []
+    },
+    "connected": false,
+    "stats": {
+        "source": "tinybird",
+        "window": "30d",
+        "calls": 250,
+        "successRate": 1,
+        "p50Ms": 6499.5,
+        "qualified": true
+    }
+}

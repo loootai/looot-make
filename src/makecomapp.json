@@ -22,7 +22,7 @@
         "module": {
             "findWorkEmail": {
                 "label": "Find a work email",
-                "description": "Finds the work email of a person from their name and company domain.",
+                "description": "Finds the work email of a person from their name and company domain, or from a LinkedIn URL.",
                 "moduleType": "action",
                 "actionCrud": "read",
                 "connection": "looot",
@@ -52,7 +52,7 @@
             },
             "enrichCompany": {
                 "label": "Enrich a company",
-                "description": "Returns the name, industry and size of a company from its domain or name.",
+                "description": "Returns the name, industry and size of a company from its domain, name or LinkedIn URL.",
                 "moduleType": "action",
                 "actionCrud": "read",
                 "connection": "looot",
@@ -96,7 +96,7 @@
             },
             "getOperation": {
                 "label": "Get an operation",
-                "description": "Returns the exact inputs, output and price of one endpoint or job. Free.",
+                "description": "Returns the inputs, output and price of one endpoint. Free.",
                 "moduleType": "action",
                 "actionCrud": "read",
                 "connection": "looot",
@@ -141,7 +141,7 @@
             },
             "watchFinishedRuns": {
                 "label": "Watch finished runs",
-                "description": "Triggers when a run in your workspace reaches a final status.",
+                "description": "Triggers when a run in your workspace reaches a final status. Runs come newest first by creation time.",
                 "moduleType": "trigger",
                 "connection": "looot",
                 "altConnection": null,
@@ -169,7 +169,35 @@
                 }
             }
         },
-        "rpc": {},
+        "rpc": {
+            "listOperations": {
+                "label": "List operations",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "rpcs/listOperations/listOperations.communication.iml.json",
+                    "staticParams": "rpcs/listOperations/listOperations.params.iml.json"
+                }
+            },
+            "listRuns": {
+                "label": "List runs",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "rpcs/listRuns/listRuns.communication.iml.json",
+                    "staticParams": "rpcs/listRuns/listRuns.params.iml.json"
+                }
+            },
+            "operationInputFields": {
+                "label": "Operation input fields",
+                "connection": "looot",
+                "altConnection": null,
+                "codeFiles": {
+                    "communication": "rpcs/operationInputFields/operationInputFields.communication.iml.json",
+                    "staticParams": "rpcs/operationInputFields/operationInputFields.params.iml.json"
+                }
+            }
+        },
         "function": {},
         "endpoint": {}
     },

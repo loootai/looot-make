@@ -1,0 +1,24 @@
+{
+    "url": "/v1/catalog/search",
+    "method": "GET",
+    "qs": {
+        "q": "{{parameters.operationSearch}}",
+        "verified": "{{if(parameters.operationSearch, undefined, true)}}",
+        "limit": 100,
+        "offset": 0
+    },
+    "pagination": {
+        "qs": {
+            "offset": "{{(pagination.page - 1) * 100}}"
+        },
+        "condition": "{{body.nextOffset != null}}"
+    },
+    "response": {
+        "limit": 300,
+        "iterate": "{{body.endpoints}}",
+        "output": {
+            "label": "{{item.name}} ({{item.estimatedPrice}} USD, {{item.priceBasis}})",
+            "value": "{{item.endpointId}}"
+        }
+    }
+}

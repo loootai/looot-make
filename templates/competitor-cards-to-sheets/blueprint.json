@@ -47,6 +47,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:news.search",
+        "inputMode": "json",
         "input": "{\"query\": \"{{ifempty(2.companyName; 1.`0`)}}\"}",
         "fallback": true,
         "maxCostUsd": 0.01,
@@ -66,6 +67,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:web.scrape.markdown",
+        "inputMode": "json",
         "input": "{\"url\": \"https://{{1.`0`}}/pricing\"}",
         "fallback": true,
         "maxCostUsd": 0.01,

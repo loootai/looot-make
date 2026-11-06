@@ -1,0 +1,19 @@
+{
+    "url": "{{if(indexOf(trim(parameters.endpointId), 'job:') == 0, '/v1/catalog/search', '/v1/operations/' + trim(parameters.endpointId))}}",
+    "method": "GET",
+    "qs": {
+        "capability": "{{if(indexOf(trim(parameters.endpointId), 'job:') == 0, substring(trim(parameters.endpointId), 4), undefined)}}",
+        "limit": "{{if(indexOf(trim(parameters.endpointId), 'job:') == 0, 1, undefined)}}"
+    },
+    "response": {
+        "iterate": "{{if(indexOf(trim(parameters.endpointId), 'job:') == 0, keys(get(first(toArray(body.jobInputs)), 'value')), keys(body.inputSchema.properties))}}",
+        "limit": 100,
+        "output": {
+            "name": "{{item}}",
+            "label": "{{item}}",
+            "type": "{{if(indexOf(trim(parameters.endpointId), 'job:') == 0, 'text', switch(get(get(body.inputSchema.properties, item), 'type'), 'string', 'text', 'integer', 'integer', 'number', 'number', 'boolean', 'boolean', 'any'))}}",
+            "required": "{{if(indexOf(trim(parameters.endpointId), 'job:') == 0, false, contains(ifempty(body.inputSchema.required, split('', ',')), item))}}",
+            "help": "{{if(indexOf(trim(parameters.endpointId), 'job:') == 0, 'Accepted by ' + get(get(get(first(toArray(body.jobInputs)), 'value'), item), 'endpoints') + ' of the ' + get(get(get(first(toArray(body.jobInputs)), 'value'), item), 'of') + ' providers of this job.', ifempty(get(get(body.inputSchema.properties, item), 'description'), 'Type: ' + ifempty(get(get(body.inputSchema.properties, item), 'type'), 'any') + '.'))}}"
+        }
+    }
+}

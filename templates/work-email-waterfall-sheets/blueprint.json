@@ -28,8 +28,8 @@
       "version": 1,
       "parameters": {},
       "mapper": {
-        "firstName": "{{1.`0`}}",
-        "lastName": "{{1.`1`}}",
+        "first_name": "{{1.`0`}}",
+        "last_name": "{{1.`1`}}",
         "domain": "{{1.`2`}}",
         "fallback": true,
         "maxCostUsd": 0.05,

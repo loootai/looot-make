@@ -1,1 +1,328 @@
-[]
+[
+    {
+        "name": "endpoint",
+        "type": "collection",
+        "label": "Endpoint",
+        "spec": [
+            {
+                "name": "id",
+                "type": "text",
+                "label": "Endpoint ID"
+            },
+            {
+                "name": "name",
+                "type": "text",
+                "label": "Name"
+            },
+            {
+                "name": "description",
+                "type": "text",
+                "label": "Description"
+            },
+            {
+                "name": "capability",
+                "type": "text",
+                "label": "Job ID"
+            },
+            {
+                "name": "sourceCapability",
+                "type": "text",
+                "label": "Source job ID"
+            },
+            {
+                "name": "provider",
+                "type": "text",
+                "label": "Provider"
+            },
+            {
+                "name": "providerId",
+                "type": "text",
+                "label": "Provider ID"
+            },
+            {
+                "name": "executionMode",
+                "type": "text",
+                "label": "Execution mode"
+            },
+            {
+                "name": "eligibility",
+                "type": "text",
+                "label": "Eligibility"
+            },
+            {
+                "name": "credential",
+                "type": "text",
+                "label": "Credential"
+            },
+            {
+                "name": "effectClassification",
+                "type": "text",
+                "label": "Effect"
+            },
+            {
+                "name": "price",
+                "type": "collection",
+                "label": "Price",
+                "spec": [
+                    {
+                        "name": "currency",
+                        "type": "text",
+                        "label": "Currency"
+                    },
+                    {
+                        "name": "perCall",
+                        "type": "number",
+                        "label": "Price per call (USD)"
+                    },
+                    {
+                        "name": "estimateFormula",
+                        "type": "text",
+                        "label": "Price formula"
+                    }
+                ]
+            },
+            {
+                "name": "inputSchemaSummary",
+                "type": "text",
+                "label": "Input summary"
+            },
+            {
+                "name": "outputSchemaSummary",
+                "type": "text",
+                "label": "Output summary"
+            },
+            {
+                "name": "examples",
+                "type": "array",
+                "label": "Examples",
+                "spec": {
+                    "type": "text"
+                }
+            },
+            {
+                "name": "observedSuccessRate",
+                "type": "number",
+                "label": "Observed success rate"
+            },
+            {
+                "name": "observedLatencyMs",
+                "type": "number",
+                "label": "Observed latency (ms)"
+            },
+            {
+                "name": "sampleSize",
+                "type": "number",
+                "label": "Sample size"
+            }
+        ]
+    },
+    {
+        "name": "inputSchema",
+        "type": "collection",
+        "label": "Inputs (JSON Schema)",
+        "spec": [
+            {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+            },
+            {
+                "name": "required",
+                "type": "array",
+                "label": "Required inputs",
+                "spec": {
+                    "type": "text"
+                }
+            },
+            {
+                "name": "properties",
+                "type": "any",
+                "label": "Input fields"
+            },
+            {
+                "name": "additionalProperties",
+                "type": "any",
+                "label": "Other fields allowed"
+            }
+        ]
+    },
+    {
+        "name": "uiSchema",
+        "type": "collection",
+        "label": "Input form hints",
+        "spec": [
+            {
+                "name": "order",
+                "type": "array",
+                "label": "Field order",
+                "spec": {
+                    "type": "text"
+                }
+            },
+            {
+                "name": "labels",
+                "type": "any",
+                "label": "Labels"
+            },
+            {
+                "name": "widgets",
+                "type": "any",
+                "label": "Widgets"
+            }
+        ]
+    },
+    {
+        "name": "requestBinding",
+        "type": "any",
+        "label": "Request binding"
+    },
+    {
+        "name": "outputFormat",
+        "type": "collection",
+        "label": "Output",
+        "spec": [
+            {
+                "name": "schema",
+                "type": "any",
+                "label": "Output schema (JSON Schema)"
+            }
+        ]
+    },
+    {
+        "name": "estimatedMaxCost",
+        "type": "number",
+        "label": "Most one call can cost (USD)"
+    },
+    {
+        "name": "priceRange",
+        "type": "collection",
+        "label": "Price range",
+        "spec": [
+            {
+                "name": "minMicros",
+                "type": "number",
+                "label": "Lowest price (millionths of a dollar)"
+            },
+            {
+                "name": "maxMicros",
+                "type": "number",
+                "label": "Highest price (millionths of a dollar)"
+            },
+            {
+                "name": "scalesWith",
+                "type": "array",
+                "label": "Price scales with",
+                "spec": {
+                    "type": "text"
+                }
+            }
+        ]
+    },
+    {
+        "name": "connected",
+        "type": "boolean",
+        "label": "Your own account connected"
+    },
+    {
+        "name": "observedFrom",
+        "type": "text",
+        "label": "Stats source"
+    },
+    {
+        "name": "stats",
+        "type": "collection",
+        "label": "Stats (30 days)",
+        "spec": [
+            {
+                "name": "source",
+                "type": "text",
+                "label": "Source"
+            },
+            {
+                "name": "window",
+                "type": "text",
+                "label": "Window"
+            },
+            {
+                "name": "calls",
+                "type": "number",
+                "label": "Calls"
+            },
+            {
+                "name": "successRate",
+                "type": "number",
+                "label": "Success rate"
+            },
+            {
+                "name": "p50Ms",
+                "type": "number",
+                "label": "Median latency (ms)"
+            },
+            {
+                "name": "p95Ms",
+                "type": "number",
+                "label": "p95 latency (ms)"
+            },
+            {
+                "name": "lastSuccessAt",
+                "type": "text",
+                "label": "Last success (UTC, as looot writes it)"
+            },
+            {
+                "name": "qualified",
+                "type": "boolean",
+                "label": "Enough calls to rank"
+            }
+        ]
+    },
+    {
+        "name": "usageHints",
+        "type": "collection",
+        "label": "Usage hints",
+        "spec": [
+            {
+                "name": "endpointId",
+                "type": "text",
+                "label": "Endpoint ID"
+            },
+            {
+                "name": "operationVersion",
+                "type": "text",
+                "label": "Operation version"
+            },
+            {
+                "name": "contractDigest",
+                "type": "text",
+                "label": "Contract digest"
+            },
+            {
+                "name": "requiredInputFields",
+                "type": "array",
+                "label": "Required inputs",
+                "spec": {
+                    "type": "text"
+                }
+            },
+            {
+                "name": "outputSchema",
+                "type": "any",
+                "label": "Output schema"
+            },
+            {
+                "name": "examples",
+                "type": "any",
+                "label": "Call examples"
+            }
+        ]
+    },
+    {
+        "name": "testRequest",
+        "type": "any",
+        "label": "Test request"
+    },
+    {
+        "name": "verifiedAt",
+        "type": "date",
+        "label": "Verified at"
+    }
+]

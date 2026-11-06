@@ -47,11 +47,14 @@ for (const t of TEMPLATES) {
         assert.ok(component, `${name} is a module of the app`);
         const params = await readJson(path.join('src', component.codeFiles.mappableParams));
         const stat = await readJson(path.join('src', component.codeFiles.staticParams));
-        const allowed = new Set(params.map((p) => p.name));
+        // Fields nested under a select option (Run an operation's Input) count too.
+        const nested = params.flatMap((p) => (Array.isArray(p.options) ? p.options : []).flatMap((o) => (Array.isArray(o.nested) ? o.nested : [])));
+        const allowed = new Set([...params, ...nested].map((p) => p.name));
         for (const key of Object.keys(m.mapper)) assert.ok(allowed.has(key), `${name} has mappable param ${key}`);
         for (const key of Object.keys(m.parameters)) assert.ok(stat.some((p) => p.name === key), `${name} has static param ${key}`);
         for (const p of params.filter((x) => x.required)) assert.ok(m.mapper[p.name] !== undefined, `${name} gets required ${p.name}`);
         if (name === 'runOperation') {
+          assert.equal(m.mapper.inputMode, 'json');
           assert.match(m.mapper.endpointId, /^job:[a-z]+(\.[a-z]+)+$/);
           const probe = m.mapper.input.replace(/\{\{[^}]*\}\}/g, 'x');
           assert.doesNotThrow(() => JSON.parse(probe), `${m.id} input is JSON once mapped`);

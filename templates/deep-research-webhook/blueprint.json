@@ -24,6 +24,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:google.serp.organic",
+        "inputMode": "json",
         "input": "{\"query\": \"{{1.question}}\"}",
         "fallback": true,
         "maxCostUsd": 0.01,
@@ -58,6 +59,7 @@
       "parameters": {},
       "mapper": {
         "endpointId": "job:web.scrape.markdown",
+        "inputMode": "json",
         "input": "{\"url\": \"{{3.link}}\"}",
         "fallback": true,
         "maxCostUsd": 0.01,

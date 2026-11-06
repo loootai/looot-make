@@ -1,21 +1,13 @@
 {
-    "url": "/v1/runs/{{parameters.runId}}",
+    "url": "/v1/runs/{{trim(parameters.runId)}}",
     "method": "GET",
     "response": {
         "output": {
-            "fields": "{{body.normalized.fields}}",
-            "createdAt": "{{body.createdAt}}",
-            "completedAt": "{{body.completedAt}}",
-            "runId": "{{body.runId}}",
-            "status": "{{body.status}}",
-            "endpointId": "{{body.endpointId}}",
-            "servedProviderId": "{{body.servedProviderId}}",
-            "outcome": "{{body.outcome}}",
-            "actualCost": "{{body.actualCost}}",
-            "replayed": "{{body.replayed}}",
-            "result": "{{body.result}}",
-            "normalized": "{{body.normalized}}",
-            "error": "{{body.error}}"
+            "{{...}}": "{{body}}",
+            "createdAt": "{{if(body.createdAt, parseDate(body.createdAt), undefined)}}",
+            "startedAt": "{{if(body.startedAt, parseDate(body.startedAt), undefined)}}",
+            "completedAt": "{{if(body.completedAt, parseDate(body.completedAt), undefined)}}",
+            "fields": "{{body.normalized.fields}}"
         }
     }
 }

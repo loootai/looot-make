@@ -1,18 +1,48 @@
 [
     {
-        "name": "endpointId",
+        "name": "operationSearch",
         "type": "text",
-        "label": "Endpoint or job ID",
-        "required": true,
-        "help": "An endpoint ID from Search operations, or a job written as `job:<job id>`, for example `job:people.email.find`."
+        "label": "Find operations",
+        "help": "Words that fill the Endpoint ID list, for example `verify an email`. Leave empty to list verified endpoints. Only used to fill the list; the module does not send it."
     },
     {
-        "name": "input",
-        "type": "json",
-        "label": "Input (JSON)",
+        "name": "endpointId",
+        "type": "select",
+        "label": "Endpoint ID",
         "required": true,
-        "default": "{}",
-        "help": "The input object. Use the field names that Get an operation lists for this endpoint or job."
+        "mode": "edit",
+        "options": "rpc://listOperations",
+        "help": "Pick an endpoint, or type or map an endpoint ID or a job written as `job:<job id>`, for example `job:people.email.find`. A job lets looot pick the provider."
+    },
+    {
+        "name": "inputMode",
+        "type": "select",
+        "label": "Input",
+        "required": true,
+        "default": "json",
+        "options": [
+            {
+                "label": "JSON",
+                "value": "json",
+                "nested": [
+                    {
+                        "name": "input",
+                        "type": "text",
+                        "label": "Input (JSON)",
+                        "required": true,
+                        "default": "{}",
+                        "multiline": true,
+                        "help": "The input object as JSON text, for example `{\"email\": \"jane.doe@example.com\"}`. The module parses it and sends an object. Get an operation lists the field names. Use this when an agent or an earlier module builds the input."
+                    }
+                ]
+            },
+            {
+                "label": "Fields of the selected operation",
+                "value": "fields",
+                "nested": "rpc://operationInputFields"
+            }
+        ],
+        "help": "JSON takes any input. Fields of the selected operation shows one field per input of the Endpoint ID, read from looot."
     },
     {
         "name": "fallback",

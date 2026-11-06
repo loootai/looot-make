@@ -1,7 +1,14 @@
 {
     "endpointId": "icypeas-email-verify",
-    "provider": "icypeas",
+    "name": "Icypeas / Verify an email address",
+    "provider": "Icypeas",
+    "providerId": "icypeas",
     "capability": "people.email.verify",
     "estimatedPrice": 0.0019,
-    "priceBasis": "perCall"
+    "priceBasis": "perCall",
+    "access": "runs_now",
+    "runnableNow": true,
+    "facts": {
+        "costPerSuccessUsd": 0.0019
+    }
 }

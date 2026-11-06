@@ -50,7 +50,7 @@ Sheets and what each template leaves out:
 
 - No blueprint has been imported or run in Make. Module names and versions for Google Sheets, Slack, HubSpot, OpenAI, Webhooks, JSON, the iterator, the router and the text aggregator come from Make's own examples in `integromat/make-skills` (read 2026-10-31). Make may ask you to re-pick a field after import.
 - The `app#looot` prefix is how Make writes custom app modules in a blueprint. Whether an approved, public looot app keeps that prefix is not known yet.
-- The run module's Input is a JSON field. A mapped value that contains a double quote breaks that JSON. Clean such values with `replace()` first.
+- The run module's Input is JSON text, which the module parses and sends as an object. A mapped value that contains a double quote breaks that JSON. Clean such values with `replace()` first.
 - Paths such as `{{2.result.organic}}` depend on the provider that answered. The templates pass `toString(result)` to OpenAI where the shape varies.
 - The HubSpot `company` and `website` fields and OpenAI's `json_object` response format are taken from the apps' usual field names, not read from Make.
 

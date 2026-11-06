@@ -7,7 +7,7 @@
     "response": {
         "valid": "{{statusCode === 200 && !body.error}}",
         "error": {
-            "message": "[{{statusCode}}] {{body.error.code}}: {{body.error.message}}"
+            "message": "[{{statusCode}}] {{ifempty(body.error.code, 'error')}}: {{ifempty(body.error.message, 'looot answered HTTP ' + statusCode + ' with no error message.')}}"
         },
         "metadata": {
             "type": "text",

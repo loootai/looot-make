@@ -4,12 +4,18 @@
     "qs": {
         "limit": 50
     },
+    "pagination": {
+        "qs": {
+            "cursor": "{{body.nextCursor}}"
+        },
+        "condition": "{{body.nextCursor != null}}"
+    },
     "response": {
-        "limit": 50,
+        "limit": 150,
         "iterate": "{{body.runs}}",
         "output": {
             "label": "{{item.endpointId}} ({{item.status}})",
-            "date": "{{ifempty(item.completedAt, item.createdAt)}}"
+            "date": "{{parseDate(item.createdAt)}}"
         }
     }
 }

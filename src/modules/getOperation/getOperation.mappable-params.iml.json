@@ -1,9 +1,17 @@
 [
     {
-        "name": "endpointId",
+        "name": "operationSearch",
         "type": "text",
-        "label": "Endpoint or job ID",
+        "label": "Find operations",
+        "help": "Words that fill the Endpoint ID list, for example `verify an email`. Leave empty to list verified endpoints. Only used to fill the list; the module does not send it."
+    },
+    {
+        "name": "endpointId",
+        "type": "select",
+        "label": "Endpoint ID",
         "required": true,
-        "help": "An endpoint ID from Search operations, or a job written as `job:<job id>`."
+        "mode": "edit",
+        "options": "rpc://listOperations",
+        "help": "Pick an endpoint, or type or map an endpoint ID from Search operations. A job (`job:<job id>`) is not one operation; search with Job ID set to it to list its endpoints."
     }
 ]
